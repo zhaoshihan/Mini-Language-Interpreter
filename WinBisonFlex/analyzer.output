@@ -1,0 +1,330 @@
+Terminals unused in grammar
+
+   IDENTIFIER
+   FUNCTION
+   IF
+   ELSE
+   ELSIF
+   WHILE
+   FOR
+   RETURN_T
+   BREAK
+   CONTINUE
+   NULL_T
+   LC
+   RC
+   SEMICOLON
+   COMMA
+   ASSIGN
+   LOGICAL_AND
+   LOGICAL_OR
+   EQ
+   NE
+   GT
+   GE
+   LT
+   LE
+   MOD
+   TRUE_T
+   FALSE_T
+   GLOBAL_T
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: %empty
+    2        | program line
+
+    3 line: '\n'
+    4     | expr '\n'
+    5     | "hello msg" '\n'
+    6     | error '\n'
+
+    7 expr: NUM
+    8     | expr ADD expr
+    9     | expr SUB expr
+   10     | expr MUL expr
+   11     | expr DIV expr
+   12     | LP expr RP
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 3 4 5 6
+error (256) 6
+NUM (258) 7
+"hello msg" (259) 5
+IDENTIFIER (260)
+FUNCTION (261)
+IF (262)
+ELSE (263)
+ELSIF (264)
+WHILE (265)
+FOR (266)
+RETURN_T (267)
+BREAK (268)
+CONTINUE (269)
+NULL_T (270)
+LC (271)
+RC (272)
+SEMICOLON (273)
+COMMA (274)
+ASSIGN (275)
+LOGICAL_AND (276)
+LOGICAL_OR (277)
+EQ (278)
+NE (279)
+GT (280)
+GE (281)
+LT (282)
+LE (283)
+MOD (284)
+TRUE_T (285)
+FALSE_T (286)
+GLOBAL_T (287)
+SUB (288) 9
+ADD (289) 8
+MUL (290) 10
+DIV (291) 11
+LP (292) 12
+RP (293) 12
+
+
+Nonterminals, with rules where they appear
+
+$accept (40)
+    on left: 0
+program (41)
+    on left: 1 2, on right: 0 2
+line (42)
+    on left: 3 4 5 6, on right: 2
+expr (43)
+    on left: 7 8 9 10 11 12, on right: 4 8 9 10 11 12
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+State 1
+
+    0 $accept: program . $end
+    2 program: program . line
+
+    $end         shift, and go to state 2
+    error        shift, and go to state 3
+    NUM          shift, and go to state 4
+    "hello msg"  shift, and go to state 5
+    LP           shift, and go to state 6
+    '\n'         shift, and go to state 7
+
+    line  go to state 8
+    expr  go to state 9
+
+
+State 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 3
+
+    6 line: error . '\n'
+
+    '\n'  shift, and go to state 10
+
+
+State 4
+
+    7 expr: NUM .
+
+    $default  reduce using rule 7 (expr)
+
+
+State 5
+
+    5 line: "hello msg" . '\n'
+
+    '\n'  shift, and go to state 11
+
+
+State 6
+
+   12 expr: LP . expr RP
+
+    NUM  shift, and go to state 4
+    LP   shift, and go to state 6
+
+    expr  go to state 12
+
+
+State 7
+
+    3 line: '\n' .
+
+    $default  reduce using rule 3 (line)
+
+
+State 8
+
+    2 program: program line .
+
+    $default  reduce using rule 2 (program)
+
+
+State 9
+
+    4 line: expr . '\n'
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+
+    SUB   shift, and go to state 13
+    ADD   shift, and go to state 14
+    MUL   shift, and go to state 15
+    DIV   shift, and go to state 16
+    '\n'  shift, and go to state 17
+
+
+State 10
+
+    6 line: error '\n' .
+
+    $default  reduce using rule 6 (line)
+
+
+State 11
+
+    5 line: "hello msg" '\n' .
+
+    $default  reduce using rule 5 (line)
+
+
+State 12
+
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+   12     | LP expr . RP
+
+    SUB  shift, and go to state 13
+    ADD  shift, and go to state 14
+    MUL  shift, and go to state 15
+    DIV  shift, and go to state 16
+    RP   shift, and go to state 18
+
+
+State 13
+
+    9 expr: expr SUB . expr
+
+    NUM  shift, and go to state 4
+    LP   shift, and go to state 6
+
+    expr  go to state 19
+
+
+State 14
+
+    8 expr: expr ADD . expr
+
+    NUM  shift, and go to state 4
+    LP   shift, and go to state 6
+
+    expr  go to state 20
+
+
+State 15
+
+   10 expr: expr MUL . expr
+
+    NUM  shift, and go to state 4
+    LP   shift, and go to state 6
+
+    expr  go to state 21
+
+
+State 16
+
+   11 expr: expr DIV . expr
+
+    NUM  shift, and go to state 4
+    LP   shift, and go to state 6
+
+    expr  go to state 22
+
+
+State 17
+
+    4 line: expr '\n' .
+
+    $default  reduce using rule 4 (line)
+
+
+State 18
+
+   12 expr: LP expr RP .
+
+    $default  reduce using rule 12 (expr)
+
+
+State 19
+
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+    9     | expr SUB expr .
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+
+    MUL  shift, and go to state 15
+    DIV  shift, and go to state 16
+
+    $default  reduce using rule 9 (expr)
+
+
+State 20
+
+    8 expr: expr . ADD expr
+    8     | expr ADD expr .
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+
+    MUL  shift, and go to state 15
+    DIV  shift, and go to state 16
+
+    $default  reduce using rule 8 (expr)
+
+
+State 21
+
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   10     | expr MUL expr .
+   11     | expr . DIV expr
+
+    $default  reduce using rule 10 (expr)
+
+
+State 22
+
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+   11     | expr DIV expr .
+
+    $default  reduce using rule 11 (expr)
