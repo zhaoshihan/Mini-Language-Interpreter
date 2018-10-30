@@ -60,7 +60,7 @@ extern int yydebug;
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
-  {
+  { 
     NUM = 258,
     HELLO = 259,
     IDENTIFIER = 260,
@@ -103,7 +103,9 @@ extern int yydebug;
 	INT_TYPE = 297,
 	FLOAT_TYPE = 298,
 	BOOL_TYPE = 299,
-	STRING_TYPE = 300
+	STRING_TYPE = 300,
+	INT_NUM = 301,
+	FLOAT_NUM = 302
   };
 #endif
 
