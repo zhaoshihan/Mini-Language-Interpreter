@@ -46,57 +46,65 @@
 	using namespace std;
 
 	#include "analyzer.h"
+	#include "ScannerParserCL.h"
 }
 
 NUMB	([0-9]+)|([0-9]*\.[0-9]+)
 
 %%
-"function"     {yyextra->SayHello("function");return FUNCTION;}
-"if"           {yyextra->SayHello("if");return IF;}
-"else"         {yyextra->SayHello("else");return ELSE;}
-"elsif"        {yyextra->SayHello("elsif");return ELSIF;}
-"while"        {yyextra->SayHello("while");return WHILE;}
-"for"          {yyextra->SayHello("for");return FOR;}
-"return"	   {yyextra->SayHello("return");return RETURN_T;}
-"break"        {yyextra->SayHello("break");return BREAK;}
-"continue"     {yyextra->SayHello("continue");return CONTINUE;}
-"null"         {yyextra->SayHello("null");return NULL_T;}
-"true"         {yyextra->SayHello("true");return TRUE_T;}
-"false"        {yyextra->SayHello("false");return FALSE_T;}
-"global"       {yyextra->SayHello("global");return GLOBAL_T;}
-"("            {yyextra->SayHello("(");return LP;}
-")"            {yyextra->SayHello(")");return RP;}
-"{"            {yyextra->SayHello("{");return LC;}
-"}"            {yyextra->SayHello("}");return RC;}
-";"            {yyextra->SayHello(";");return SEMICOLON;}
-","            {yyextra->SayHello(",");return COMMA;}
-"&&"           {yyextra->SayHello("&&");return LOGICAL_AND;}
-"||"           {yyextra->SayHello("||");return LOGICAL_OR;}
-"="            {yyextra->SayHello("=");return ASSIGN;}
-"=="           {yyextra->SayHello("==");return EQ;}
-"!="           {yyextra->SayHello("!=");return NE;}
-">"            {yyextra->SayHello(">");return GT;}
-">="           {yyextra->SayHello(">=");return GE;}
-"<"            {yyextra->SayHello("<");return LT;}
-"<="           {yyextra->SayHello("<=");return LE;}
-"+"            {yyextra->SayHello("+");return ADD;}
-"-"            {yyextra->SayHello("-");return SUB;}
-"*"            {yyextra->SayHello("*");return MUL;}
-"/"            {yyextra->SayHello("/");return DIV;}
-"%"            {yyextra->SayHello("%");return MOD;}
-"say_hello" { yyextra->SayHello("I am scanner, how are you doing?");
+"int"          {printf("Line:%d | Lex12(keyword)-->int\n",lineNumber);return INT_TYPE;}
+"float"        {printf("Line:%d | Lex12(keyword)-->float\n",lineNumber);return FLOAT_TYPE;}
+"bool"         {printf("Line:%d | Lex12(keyword)-->bool\n",lineNumber);return BOOL_TYPE;}
+"string"       {printf("Line:%d | Lex12(keyword)-->string\n",lineNumber);return STRING_TYPE;}
+"function"     {printf("Line:%d | Lex12(keyword)-->function\n",lineNumber);return FUNCTION;}
+"if"           {printf("Line:%d | Lex12(keyword)-->if\n",lineNumber);return IF;}
+"else"         {printf("Line:%d | Lex12(keyword)-->else\n",lineNumber);return ELSE;}
+"elseif"       {printf("Line:%d | Lex12(keyword)-->elseif\n",lineNumber);return ELSIF;}
+"while"        {printf("Line:%d | Lex12(keyword)-->while\n",lineNumber);return WHILE;}
+"for"          {printf("Line:%d | Lex12(keyword)-->for\n",lineNumber);return FOR;}
+"return"	   {printf("Line:%d | Lex12(keyword)-->return\n",lineNumber);return RETURN_T;}
+"break"        {printf("Line:%d | Lex12(keyword)-->break\n",lineNumber);return BREAK;}
+"continue"     {printf("Line:%d | Lex12(keyword)-->continue\n",lineNumber);return CONTINUE;}
+"null"         {printf("Line:%d | Lex12(keyword)-->null\n",lineNumber);return NULL_T;}
+"true"         {printf("Line:%d | Lex12(keyword)-->true\n",lineNumber);return TRUE_T;}
+"false"        {printf("Line:%d | Lex12(keyword)-->false\n",lineNumber);return FALSE_T;}
+"global"       {printf("Line:%d | Lex12(keyword)-->global\n",lineNumber);return GLOBAL_T;}
+"("            {printf("Line:%d | Lex10(operand)-->(\n",lineNumber);return LP;}
+")"            {printf("Line:%d | Lex10(operand)-->)\n",lineNumber);return RP;}
+"{"            {printf("Line:%d | Lex13(bracket)-->{\n",lineNumber);return LC;}
+"}"            {printf("Line:%d | Lex13(bracket)-->}\n",lineNumber);return RC;}
+";"            {printf("Line:%d | Lex14(punctuation)-->;\n",lineNumber);return SEMICOLON;}
+","            {printf("Line:%d | Lex14(punctuation)-->,\n",lineNumber);return COMMA;}
+"\""           {printf("Line:%d | Lex14(punctuation)-->\"\n",lineNumber);return DQ_MARK;}
+"!"            {printf("Line:%d | Lex14(LogicOp)-->!\n",lineNumber);return EXC_MARK;}
+"&&"           {printf("Line:%d | Lex11(LogicOp)-->&&\n",lineNumber);return LOGICAL_AND;}
+"||"           {printf("Line:%d | Lex11(LogicOp)-->||\n",lineNumber);return LOGICAL_OR;}
+"="            {printf("Line:%d | Lex10(Operand)-->=\n",lineNumber);return ASSIGN;}
+"=="           {printf("Line:%d | Lex11(LogicOp)-->==\n",lineNumber);return EQ;}
+"!="           {printf("Line:%d | Lex11(LogicOp)-->!=\n",lineNumber);return NE;}
+">"            {printf("Line:%d | Lex11(LogicOp)-->>\n",lineNumber);return GT;}
+">="           {printf("Line:%d | Lex11(LogicOp)-->>=\n",lineNumber);return GE;}
+"<"            {printf("Line:%d | Lex11(LogicOp)--><\n",lineNumber);return LT;}
+"<="           {printf("Line:%d | Lex11(LogicOp)--><=\n",lineNumber);return LE;}
+"+"            {printf("Line:%d | Lex10(Operand)-->+\n",lineNumber);return ADD;}
+"-"            {printf("Line:%d | Lex10(Operand)-->-\n",lineNumber);return SUB;}
+"*"            {printf("Line:%d | Lex10(Operand)-->*\n",lineNumber);return MUL;}
+"/"            {printf("Line:%d | Lex10(Operand)-->/\n",lineNumber);return DIV;}
+"%"            {printf("Line:%d | Lex10(Operand)-->%\n",lineNumber);return MOD;}
+"print"        {printf("Line:%d | Lex12 keyword)-->print\n",lineNumber);return PRINT_T;}
+"say_hello" { printf("I am scanner, how are you doing?\n");
 				return HELLO;}
-{NUMB} {
-				yyextra->SayHello(yytext);
+{NUMB} {        
+				printf("Line:%d | Lex06(RealNum)-->%s\n",lineNumber,yytext);
 				yyextra->copy_double(yylval->double_value, yytext);
 				return NUM;
 }
-[\n]			{ return '\n'; }
+[\n]			{ lineNumber++;return '\n'; }
 [ \t]			{ /* empty */ }
 [A-Za-z_][A-Za-z_0-9]* {
-				yyextra->SayHello(yytext);
+				printf("Line:%d | Lex13(Identifier)-->%s\n",lineNumber,yytext);
 				return IDENTIFIER;
 }
-.				{printf("unexpected character\n");}
+.				{printf("Line:%d | unexpected character %s\n",lineNumber,yytext);}
 %%
 

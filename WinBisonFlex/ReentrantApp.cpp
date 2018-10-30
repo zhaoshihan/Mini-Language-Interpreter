@@ -8,8 +8,11 @@
 int main()
 {
 	ScannerParserCL pt;
-
-	pt.RunParser();
+	string fileName;
+	std::cout << "Input the source file name: " << endl;
+	std::cin >> fileName;
+	lineNumber = 1;
+	pt.RunParser(fileName);
 
 	std::cout << "Type any key"; char c = std::cin.get();
 

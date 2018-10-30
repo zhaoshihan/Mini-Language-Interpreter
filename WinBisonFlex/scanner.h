@@ -16,8 +16,9 @@
 	using namespace std;
 
 	#include "analyzer.h"
+	#include "ScannerParserCL.h"
 
-#line 20 "scanner.h"
+#line 21 "scanner.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -429,9 +430,9 @@ extern int yylex \
 #undef YY_DECL
 #endif
 
-#line 102 "scanner.l"
+#line 110 "scanner.l"
 
 
-#line 435 "scanner.h"
+#line 436 "scanner.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

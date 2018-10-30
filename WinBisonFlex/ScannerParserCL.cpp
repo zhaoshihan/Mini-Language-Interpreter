@@ -4,6 +4,8 @@
 #include "scanner.h"
 #include <iomanip>
 
+
+
 ScannerParserCL::ScannerParserCL()
 {
 	treeHead = nullptr;

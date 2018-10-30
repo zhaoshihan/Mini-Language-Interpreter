@@ -5,6 +5,8 @@
 
 using namespace std;
 
+static int lineNumber = 1;
+
 struct Node
 {
 	string nodeType="number";

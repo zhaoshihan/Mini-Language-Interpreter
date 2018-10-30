@@ -136,6 +136,6 @@ expr: NUM		{ $$ = pParseTree->makeNode($1);}
 void yyerror (YYLTYPE *yylloc, yyscan_t yyscanner,
 	 ScannerParserCL* pParseTree, const char* msg)
 {
-	std::cout<<"Error - "<<msg<<std::endl;
+	
 }
 

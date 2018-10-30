@@ -96,7 +96,14 @@ extern int yydebug;
     MUL = 290,
     DIV = 291,
     LP = 292,
-    RP = 293
+    RP = 293,
+	PRINT_T = 294,
+	DQ_MARK = 295,
+	EXC_MARK = 296,
+	INT_TYPE = 297,
+	FLOAT_TYPE = 298,
+	BOOL_TYPE = 299,
+	STRING_TYPE = 300
   };
 #endif
 
