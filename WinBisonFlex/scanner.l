@@ -53,6 +53,7 @@
 NUMB    ([0-9]+\.[0-9]+)
 INTEGER	  ([0-9]+)
 COM  ("/\*")|("\*/")
+STR  \"([^\"])*\"
 %%
 "int"          {printf("Line:%d | Lex12(keyword)-->int\n\n",lineNumber);return INT_TYPE;}
 "float"        {printf("Line:%d | Lex12(keyword)-->float\n\n",lineNumber);return FLOAT_TYPE;}
@@ -98,6 +99,11 @@ COM  ("/\*")|("\*/")
 "print"        {printf("Line:%d | Lex12 keyword)-->print\n\n",lineNumber);return PRINT_T;}
 "say_hello" { printf("I am scanner, how are you doing?\n\n");
 				return HELLO;}
+
+{STR}  {
+        printf("Line:%d | Lex03(String)-->%s\n\n",lineNumber,yytext);
+		return STR_VAL;
+}
 {COM}  {
         printf("Line:%d | Lex08(Comments)-->%s\n\n",lineNumber,yytext);
 		return COMMENT;

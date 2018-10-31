@@ -108,7 +108,8 @@ extern int yydebug;
 	FLOAT_NUM = 302,
 	COMMENT = 303,
 	INCREASE = 304,
-	DECREASE = 305
+	DECREASE = 305,
+	STR_VAL = 306
   };
 #endif
 
