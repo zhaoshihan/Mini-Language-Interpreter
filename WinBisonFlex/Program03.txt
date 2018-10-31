@@ -1,0 +1,9 @@
+int temp;
+/*Calculator*/
+for(int i = 0; i<=100; i++)
+{
+if(i%3!=0){
+temp = temp +1;
+}
+}
+printf(temp);

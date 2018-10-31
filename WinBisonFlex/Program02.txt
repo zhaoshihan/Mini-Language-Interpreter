@@ -1,0 +1,12 @@
+function testFunc(int a){
+bool b = false;
+if(a>4)
+{
+b = true;
+a = a/2;
+print(a);
+}elseif(a<2)
+{
+a = a*2;
+}
+}

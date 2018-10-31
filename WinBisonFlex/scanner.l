@@ -52,6 +52,7 @@
 
 NUMB    ([0-9]+\.[0-9]+)
 INTEGER	  ([0-9]+)
+COM  ("/\*")|("\*/")
 %%
 "int"          {printf("Line:%d | Lex12(keyword)-->int\n\n",lineNumber);return INT_TYPE;}
 "float"        {printf("Line:%d | Lex12(keyword)-->float\n\n",lineNumber);return FLOAT_TYPE;}
@@ -91,11 +92,20 @@ INTEGER	  ([0-9]+)
 "-"            {printf("Line:%d | Lex10(Operand)-->-\n\n",lineNumber);return SUB;}
 "*"            {printf("Line:%d | Lex10(Operand)-->*\n\n",lineNumber);return MUL;}
 "/"            {printf("Line:%d | Lex10(Operand)-->/\n\n",lineNumber);return DIV;}
-"%"            {printf("Line:%d | Lex10(Operand)-->%\n\n",lineNumber);return MOD;}
+"%"            {printf("Line:%d | Lex10(Operand)-->%%\n\n",lineNumber);return MOD;}
+"++"           {printf("Line:%d | Lex10(Operand)-->++\n\n",lineNumber);return INCREASE;}
+"--"           {printf("Line:%d | Lex10(Operand)-->--\n\n",lineNumber);return DECREASE;}
 "print"        {printf("Line:%d | Lex12 keyword)-->print\n\n",lineNumber);return PRINT_T;}
 "say_hello" { printf("I am scanner, how are you doing?\n\n");
 				return HELLO;}
+{COM}  {
+        printf("Line:%d | Lex08(Comments)-->%s\n\n",lineNumber,yytext);
+		return COMMENT;
+}
 
+[0-9]+[A-Za-z_]+.* {
+                printf("Line:%d | unexpected identifier %s\n\n",lineNumber,yytext);
+}
 
 {NUMB} {        
 
@@ -113,8 +123,6 @@ INTEGER	  ([0-9]+)
 
 				return INT_NUM;
 }
-
-
 
 
 [\n]			{ lineNumber++;return '\n'; }

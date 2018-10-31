@@ -105,7 +105,10 @@ extern int yydebug;
 	BOOL_TYPE = 299,
 	STRING_TYPE = 300,
 	INT_NUM = 301,
-	FLOAT_NUM = 302
+	FLOAT_NUM = 302,
+	COMMENT = 303,
+	INCREASE = 304,
+	DECREASE = 305
   };
 #endif
 
