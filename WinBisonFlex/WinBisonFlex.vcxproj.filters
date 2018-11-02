@@ -30,9 +30,6 @@
     <ClCompile Include="ReentrantApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleApplication.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="ScannerParserCL.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

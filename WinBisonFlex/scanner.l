@@ -78,7 +78,7 @@ STR  \"([^[(\")|(\n)]])*\"
 "}"            {printf("Line:%d | Lex13(bracket)-->}\n\n",lineNumber);return RC;}
 ";"            {printf("Line:%d | Lex14(punctuation)-->;\n\n",lineNumber);return SEMICOLON;}
 ","            {printf("Line:%d | Lex14(punctuation)-->,\n\n",lineNumber);return COMMA;}
-"\""            {printf("Line:%d | Lex14(punctuation)-->\"\n\n",lineNumber);return DQ_MARK;}
+"\"            {printf("Line:%d | Lex14(punctuation)-->\"\n\n",lineNumber);return DQ_MARK;}
 "!"            {printf("Line:%d | Lex14(LogicOp)-->!\n\n",lineNumber);return EXC_MARK;}
 "&&"           {printf("Line:%d | Lex11(LogicOp)-->&&\n\n",lineNumber);return LOGICAL_AND;}
 "||"           {printf("Line:%d | Lex11(LogicOp)-->||\n\n",lineNumber);return LOGICAL_OR;}
@@ -127,7 +127,7 @@ STR  \"([^[(\")|(\n)]])*\"
 
 				yyextra->copy_double(yylval->double_value, yytext);
 
-				return INT_NUM;
+				return NUM;
 }
 
 

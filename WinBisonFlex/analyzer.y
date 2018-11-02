@@ -82,8 +82,11 @@
 	// terminal symbols are defined using %token, %left, %right, etc..
 
 %token<double_value> NUM 
+	// %token<int_value> INT_NUM
 %token HELLO "hello msg"
-%token IDENTIFIER
+%token IDENTIFIER INT_TYPE FLOAT_TYPE BOOL_TYPE STRING_TYPE
+%token DQ_MARK EXC_MARK INCREASE DECREASE
+%token STR_VAL PRINT_T COMMENT  
 %token FUNCTION IF ELSE ELSIF WHILE FOR RETURN_T BREAK CONTINUE NULL_T
         LC RC SEMICOLON COMMA ASSIGN LOGICAL_AND LOGICAL_OR
         EQ NE GT GE LT LE MOD TRUE_T FALSE_T GLOBAL_T
@@ -126,6 +129,7 @@ expr: NUM		{ $$ = pParseTree->makeNode($1);}
 	| expr MUL expr	{$$ = pParseTree->makeNode($1->value*$3->value, $1, $3, "*");}
 	| expr DIV expr	{$$ = pParseTree->makeNode($1->value/$3->value, $1, $3, "/");}
 	| LP expr RP { $$ = pParseTree->makeNode($2->value, $2, "()"); }
+	| SUB expr %prec LP {$$ = pParseTree->makeNode(-$2->value, $2, "-");}
 	;
 
 %%
@@ -136,6 +140,6 @@ expr: NUM		{ $$ = pParseTree->makeNode($1);}
 void yyerror (YYLTYPE *yylloc, yyscan_t yyscanner,
 	 ScannerParserCL* pParseTree, const char* msg)
 {
-	
+	std::cout<<"Error - "<<msg<<std::endl;
 }
 

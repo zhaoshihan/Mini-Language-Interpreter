@@ -27,6 +27,7 @@ struct Node
 			delete right;
 			right = nullptr;
 		}
+		delete this;
 	}
 };
 

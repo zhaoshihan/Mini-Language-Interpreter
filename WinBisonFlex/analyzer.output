@@ -1,6 +1,17 @@
 Terminals unused in grammar
 
    IDENTIFIER
+   INT_TYPE
+   FLOAT_TYPE
+   BOOL_TYPE
+   STRING_TYPE
+   DQ_MARK
+   EXC_MARK
+   INCREASE
+   DECREASE
+   STR_VAL
+   PRINT_T
+   COMMENT
    FUNCTION
    IF
    ELSE
@@ -48,6 +59,7 @@ Grammar
    10     | expr MUL expr
    11     | expr DIV expr
    12     | LP expr RP
+   13     | SUB expr
 
 
 Terminals, with rules where they appear
@@ -58,51 +70,62 @@ error (256) 6
 NUM (258) 7
 "hello msg" (259) 5
 IDENTIFIER (260)
-FUNCTION (261)
-IF (262)
-ELSE (263)
-ELSIF (264)
-WHILE (265)
-FOR (266)
-RETURN_T (267)
-BREAK (268)
-CONTINUE (269)
-NULL_T (270)
-LC (271)
-RC (272)
-SEMICOLON (273)
-COMMA (274)
-ASSIGN (275)
-LOGICAL_AND (276)
-LOGICAL_OR (277)
-EQ (278)
-NE (279)
-GT (280)
-GE (281)
-LT (282)
-LE (283)
-MOD (284)
-TRUE_T (285)
-FALSE_T (286)
-GLOBAL_T (287)
-SUB (288) 9
-ADD (289) 8
-MUL (290) 10
-DIV (291) 11
-LP (292) 12
-RP (293) 12
+INT_TYPE (261)
+FLOAT_TYPE (262)
+BOOL_TYPE (263)
+STRING_TYPE (264)
+DQ_MARK (265)
+EXC_MARK (266)
+INCREASE (267)
+DECREASE (268)
+STR_VAL (269)
+PRINT_T (270)
+COMMENT (271)
+FUNCTION (272)
+IF (273)
+ELSE (274)
+ELSIF (275)
+WHILE (276)
+FOR (277)
+RETURN_T (278)
+BREAK (279)
+CONTINUE (280)
+NULL_T (281)
+LC (282)
+RC (283)
+SEMICOLON (284)
+COMMA (285)
+ASSIGN (286)
+LOGICAL_AND (287)
+LOGICAL_OR (288)
+EQ (289)
+NE (290)
+GT (291)
+GE (292)
+LT (293)
+LE (294)
+MOD (295)
+TRUE_T (296)
+FALSE_T (297)
+GLOBAL_T (298)
+SUB (299) 9 13
+ADD (300) 8
+MUL (301) 10
+DIV (302) 11
+LP (303) 12
+RP (304) 12
 
 
 Nonterminals, with rules where they appear
 
-$accept (40)
+$accept (51)
     on left: 0
-program (41)
+program (52)
     on left: 1 2, on right: 0 2
-line (42)
+line (53)
     on left: 3 4 5 6, on right: 2
-expr (43)
-    on left: 7 8 9 10 11 12, on right: 4 8 9 10 11 12
+expr (54)
+    on left: 7 8 9 10 11 12 13, on right: 4 8 9 10 11 12 13
 
 
 State 0
@@ -123,11 +146,12 @@ State 1
     error        shift, and go to state 3
     NUM          shift, and go to state 4
     "hello msg"  shift, and go to state 5
-    LP           shift, and go to state 6
-    '\n'         shift, and go to state 7
+    SUB          shift, and go to state 6
+    LP           shift, and go to state 7
+    '\n'         shift, and go to state 8
 
-    line  go to state 8
-    expr  go to state 9
+    line  go to state 9
+    expr  go to state 10
 
 
 State 2
@@ -141,7 +165,7 @@ State 3
 
     6 line: error . '\n'
 
-    '\n'  shift, and go to state 10
+    '\n'  shift, and go to state 11
 
 
 State 4
@@ -155,34 +179,46 @@ State 5
 
     5 line: "hello msg" . '\n'
 
-    '\n'  shift, and go to state 11
+    '\n'  shift, and go to state 12
 
 
 State 6
 
-   12 expr: LP . expr RP
+   13 expr: SUB . expr
 
     NUM  shift, and go to state 4
-    LP   shift, and go to state 6
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
 
-    expr  go to state 12
+    expr  go to state 13
 
 
 State 7
+
+   12 expr: LP . expr RP
+
+    NUM  shift, and go to state 4
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
+
+    expr  go to state 14
+
+
+State 8
 
     3 line: '\n' .
 
     $default  reduce using rule 3 (line)
 
 
-State 8
+State 9
 
     2 program: program line .
 
     $default  reduce using rule 2 (program)
 
 
-State 9
+State 10
 
     4 line: expr . '\n'
     8 expr: expr . ADD expr
@@ -190,28 +226,39 @@ State 9
    10     | expr . MUL expr
    11     | expr . DIV expr
 
-    SUB   shift, and go to state 13
-    ADD   shift, and go to state 14
-    MUL   shift, and go to state 15
-    DIV   shift, and go to state 16
-    '\n'  shift, and go to state 17
+    SUB   shift, and go to state 15
+    ADD   shift, and go to state 16
+    MUL   shift, and go to state 17
+    DIV   shift, and go to state 18
+    '\n'  shift, and go to state 19
 
 
-State 10
+State 11
 
     6 line: error '\n' .
 
     $default  reduce using rule 6 (line)
 
 
-State 11
+State 12
 
     5 line: "hello msg" '\n' .
 
     $default  reduce using rule 5 (line)
 
 
-State 12
+State 13
+
+    8 expr: expr . ADD expr
+    9     | expr . SUB expr
+   10     | expr . MUL expr
+   11     | expr . DIV expr
+   13     | SUB expr .
+
+    $default  reduce using rule 13 (expr)
+
+
+State 14
 
     8 expr: expr . ADD expr
     9     | expr . SUB expr
@@ -219,68 +266,72 @@ State 12
    11     | expr . DIV expr
    12     | LP expr . RP
 
-    SUB  shift, and go to state 13
-    ADD  shift, and go to state 14
-    MUL  shift, and go to state 15
-    DIV  shift, and go to state 16
-    RP   shift, and go to state 18
-
-
-State 13
-
-    9 expr: expr SUB . expr
-
-    NUM  shift, and go to state 4
-    LP   shift, and go to state 6
-
-    expr  go to state 19
-
-
-State 14
-
-    8 expr: expr ADD . expr
-
-    NUM  shift, and go to state 4
-    LP   shift, and go to state 6
-
-    expr  go to state 20
+    SUB  shift, and go to state 15
+    ADD  shift, and go to state 16
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
+    RP   shift, and go to state 20
 
 
 State 15
 
-   10 expr: expr MUL . expr
+    9 expr: expr SUB . expr
 
     NUM  shift, and go to state 4
-    LP   shift, and go to state 6
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
 
     expr  go to state 21
 
 
 State 16
 
-   11 expr: expr DIV . expr
+    8 expr: expr ADD . expr
 
     NUM  shift, and go to state 4
-    LP   shift, and go to state 6
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
 
     expr  go to state 22
 
 
 State 17
 
+   10 expr: expr MUL . expr
+
+    NUM  shift, and go to state 4
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
+
+    expr  go to state 23
+
+
+State 18
+
+   11 expr: expr DIV . expr
+
+    NUM  shift, and go to state 4
+    SUB  shift, and go to state 6
+    LP   shift, and go to state 7
+
+    expr  go to state 24
+
+
+State 19
+
     4 line: expr '\n' .
 
     $default  reduce using rule 4 (line)
 
 
-State 18
+State 20
 
    12 expr: LP expr RP .
 
     $default  reduce using rule 12 (expr)
 
 
-State 19
+State 21
 
     8 expr: expr . ADD expr
     9     | expr . SUB expr
@@ -288,13 +339,13 @@ State 19
    10     | expr . MUL expr
    11     | expr . DIV expr
 
-    MUL  shift, and go to state 15
-    DIV  shift, and go to state 16
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
 
     $default  reduce using rule 9 (expr)
 
 
-State 20
+State 22
 
     8 expr: expr . ADD expr
     8     | expr ADD expr .
@@ -302,13 +353,13 @@ State 20
    10     | expr . MUL expr
    11     | expr . DIV expr
 
-    MUL  shift, and go to state 15
-    DIV  shift, and go to state 16
+    MUL  shift, and go to state 17
+    DIV  shift, and go to state 18
 
     $default  reduce using rule 8 (expr)
 
 
-State 21
+State 23
 
     8 expr: expr . ADD expr
     9     | expr . SUB expr
@@ -319,7 +370,7 @@ State 21
     $default  reduce using rule 10 (expr)
 
 
-State 22
+State 24
 
     8 expr: expr . ADD expr
     9     | expr . SUB expr
