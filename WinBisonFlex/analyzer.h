@@ -47,6 +47,7 @@ extern int yydebug;
 
 	#include <iostream>
 	#include <cstdio>
+	#include <string>
 
 	#include "ScannerParserCL.h"
 		
@@ -54,7 +55,7 @@ extern int yydebug;
 
 	typedef void* yyscan_t;
 
-#line 58 "analyzer.h" /* yacc.c:1909  */
+#line 59 "analyzer.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -62,8 +63,8 @@ extern int yydebug;
   enum yytokentype
   {
     NUM = 258,
-    HELLO = 259,
-    IDENTIFIER = 260,
+    IDENTIFIER = 259,
+    HELLO = 260,
     INT_TYPE = 261,
     FLOAT_TYPE = 262,
     BOOL_TYPE = 263,
@@ -116,13 +117,14 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 74 "analyzer.y" /* yacc.c:1909  */
+#line 75 "analyzer.y" /* yacc.c:1909  */
 	int int_value;
 	double double_value;
-	char* string;
+	char* cstr;
 	Node* node;
+	assign_statement* assignment;
 
-#line 126 "analyzer.h" /* yacc.c:1909  */
+#line 128 "analyzer.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

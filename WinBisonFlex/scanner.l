@@ -96,7 +96,7 @@ STR  \"([^[(\")|(\n)]])*\"
 "%"            {printf("Line:%d | Lex10(Operand)-->%%\n\n",lineNumber);return MOD;}
 "++"           {printf("Line:%d | Lex10(Operand)-->++\n\n",lineNumber);return INCREASE;}
 "--"           {printf("Line:%d | Lex10(Operand)-->--\n\n",lineNumber);return DECREASE;}
-"print"        {printf("Line:%d | Lex12 keyword)-->print\n\n",lineNumber);return PRINT_T;}
+"print"        {printf("Line:%d | Lex12(keyword)-->print\n\n",lineNumber);return PRINT_T;}
 "say_hello" { printf("I am scanner, how are you doing?\n\n");
 				return HELLO;}
 
@@ -135,8 +135,8 @@ STR  \"([^[(\")|(\n)]])*\"
 [ \t]			{ /* empty */ }
 [A-Za-z_][A-Za-z_0-9]* {
 				printf("Line:%d | Lex13(Identifier)-->%s\n\n",lineNumber,yytext);
+				yyextra->copy_cstr(&yylval->cstr, yytext);
 				return IDENTIFIER;
 }
-.				{printf("Line:%d | unexpected character %s\n\n",lineNumber,yytext);}
+.				{ printf("Line:%d | unexpected character %s\n\n",lineNumber,yytext); yyterminate();}
 %%
-

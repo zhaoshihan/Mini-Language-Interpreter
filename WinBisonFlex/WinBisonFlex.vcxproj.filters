@@ -52,10 +52,10 @@
     <ClInclude Include="ScannerParserCL.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="analyzer.h">
+    <ClInclude Include="scanner.h">
       <Filter>GeneratedFiles\HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="scanner.h">
+    <ClInclude Include="analyzer.h">
       <Filter>GeneratedFiles\HeaderFiles</Filter>
     </ClInclude>
   </ItemGroup>

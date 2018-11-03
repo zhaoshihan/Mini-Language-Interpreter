@@ -38,6 +38,7 @@
 
 	#include <iostream>
 	#include <cstdio>
+	#include <string>
 
 	#include "ScannerParserCL.h"
 		
@@ -73,8 +74,9 @@
 %union
 {	int int_value;
 	double double_value;
-	char* string;
+	char* cstr;
 	Node* node;
+	assign_statement* assignment;
 }
 	//%define api.value.type { double }
 
@@ -83,8 +85,9 @@
 
 %token<double_value> NUM 
 	// %token<int_value> INT_NUM
+%token<cstr> IDENTIFIER
 %token HELLO "hello msg"
-%token IDENTIFIER INT_TYPE FLOAT_TYPE BOOL_TYPE STRING_TYPE
+%token INT_TYPE FLOAT_TYPE BOOL_TYPE STRING_TYPE
 %token DQ_MARK EXC_MARK INCREASE DECREASE
 %token STR_VAL PRINT_T COMMENT  
 %token FUNCTION IF ELSE ELSIF WHILE FOR RETURN_T BREAK CONTINUE NULL_T
@@ -97,9 +100,10 @@
 
 	// non-terminal symbols should be defined using %type in bison keyword
 %type<node> expr
+%type<assignment> assignment
 
 	// for parser debugging and tracing use
-	//%printer { fprintf(yyoutput, "--- %s", $$); } <string>
+	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
 
 	// for destructors' to call when parser' stack unwinding
 	// these routines are called only when error recovery by bison
@@ -119,15 +123,31 @@ line: '\n'
 		cout << "Parsed: "<<$1->nodeType<<"="<<$1->value<<endl;
 		pParseTree->printTree(pParseTree->getTreeHead());
 }
+	| assignment '\n'	{   
+		pParseTree->storeAssign($1);
+}
+	| PRINT_T IDENTIFIER '\n'	{ pParseTree->printIdentifier($2); }
 	| HELLO '\n'	{ pParseTree->SayHello("I am a parser!");}
 	| error '\n'	{ yyerrok; }
 	; 
 
-expr: NUM		{ $$ = pParseTree->makeNode($1);}
+assignment: IDENTIFIER ASSIGN expr	{$$ = pParseTree->makeAssign(NUMBER, $1, $3->value);}
+	;
+
+expr: NUM		{ $$ = pParseTree->makeNode( "number",$1);}
+	| IDENTIFIER	{	
+		double result = pParseTree->getIdentifier($1);
+		if(isnan(result)){ YYERROR; }
+		else{ $$ = pParseTree->makeNode( $1, result); }
+}
 	| expr ADD expr	{$$ = pParseTree->makeNode($1->value+$3->value, $1, $3, "+");}
 	| expr SUB expr	{$$ = pParseTree->makeNode($1->value-$3->value, $1, $3, "-");}
 	| expr MUL expr	{$$ = pParseTree->makeNode($1->value*$3->value, $1, $3, "*");}
-	| expr DIV expr	{$$ = pParseTree->makeNode($1->value/$3->value, $1, $3, "/");}
+	| expr DIV expr	{
+		double num = $3->value;
+		if(num >=(-1e-6)&& num<=(1e-6)){ printf("Division by zero\n"); YYERROR; }
+		else{ $$ = pParseTree->makeNode($1->value/$3->value, $1, $3, "/"); }
+}
 	| LP expr RP { $$ = pParseTree->makeNode($2->value, $2, "()"); }
 	| SUB expr %prec LP {$$ = pParseTree->makeNode(-$2->value, $2, "-");}
 	;
@@ -142,4 +162,3 @@ void yyerror (YYLTYPE *yylloc, yyscan_t yyscanner,
 {
 	std::cout<<"Error - "<<msg<<std::endl;
 }
-

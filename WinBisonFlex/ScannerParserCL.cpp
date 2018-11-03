@@ -81,9 +81,15 @@ void ScannerParserCL::copy_double(double& Target, const char* pSource)
 	Target = atof(pSource);
 }
 
-Node * ScannerParserCL::makeNode(double value)
+void ScannerParserCL::copy_string(string& Target, const char* pSource)
 {
-	Node* node = new Node(value);
+	Target = pSource;
+}
+
+
+Node * ScannerParserCL::makeNode(const char * nodeType, double value)
+{
+	Node* node = new Node(nodeType,value);
 	return node;
 }
 
@@ -135,5 +141,69 @@ void ScannerParserCL::printTree(Node * pNode, const string& prefix)
 	}
 	else {
 		return;
+	}
+}
+
+assign_statement * ScannerParserCL::makeAssign(MYTYPE Type, char* const identifier, double double_value)
+{
+	assign_statement* pState = new assign_statement(Type, identifier, double_value);
+	return pState;
+}
+
+assign_statement * ScannerParserCL::makeAssign(MYTYPE Type, char* const identifier, char* const string_value)
+{
+	assign_statement* pState = new assign_statement(Type, identifier, string_value);
+	return pState;
+}
+
+void ScannerParserCL::storeAssign(assign_statement * pState)
+{
+	if (pState == nullptr)
+	{
+		printf("get pState = nullptr error \n");
+		return;
+	}
+	MYTYPE Type = pState->Type;
+	switch (Type)
+	{
+	case NUMBER:
+		doubleIdentifiers.erase(pState->identifier);
+		doubleIdentifiers.insert(pair<string, double>(pState->identifier, pState->double_value));
+		break;
+	case STRING:
+		stringIdentifiers.erase(pState->identifier);
+		stringIdentifiers.insert(pair<string, string>(pState->identifier, pState->string_value));
+
+		break;
+	default:
+		printf("error\n");
+		break;
+	}
+
+}
+
+void ScannerParserCL::printIdentifier(string identifier)
+{
+	double result = getIdentifier(identifier);
+	if (isnan(result))
+	{
+		return;
+	}
+	else {
+		cout << "Identifier: " << identifier << "=" << result << endl;
+	}
+}
+
+double ScannerParserCL::getIdentifier(string identifier)
+{
+	auto got = doubleIdentifiers.find(identifier);
+	if (got == doubleIdentifiers.end())
+	{
+		printf("not found identifier\n");
+		return NAN;
+	}
+	else
+	{
+		return got->second;
 	}
 }
