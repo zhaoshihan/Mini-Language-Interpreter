@@ -53,7 +53,7 @@
 NUMB    ([0-9]+\.[0-9]+)
 INTEGER	  ([0-9]+)
 COM  ("/\*")|("\*/")
-STR  \"([^[(\")|(\n)]])*\"
+STR  \"([^\"&^\n])*\"
 %%
 "int"          {printf("Line:%d | Lex12(keyword)-->int\n\n",lineNumber);return INT_TYPE;}
 "float"        {printf("Line:%d | Lex12(keyword)-->float\n\n",lineNumber);return FLOAT_TYPE;}
@@ -78,7 +78,7 @@ STR  \"([^[(\")|(\n)]])*\"
 "}"            {printf("Line:%d | Lex13(bracket)-->}\n\n",lineNumber);return RC;}
 ";"            {printf("Line:%d | Lex14(punctuation)-->;\n\n",lineNumber);return SEMICOLON;}
 ","            {printf("Line:%d | Lex14(punctuation)-->,\n\n",lineNumber);return COMMA;}
-"\"            {printf("Line:%d | Lex14(punctuation)-->\"\n\n",lineNumber);return DQ_MARK;}
+"\""            {printf("Line:%d | Lex14(punctuation)-->\"\n\n",lineNumber);return DQ_MARK;}
 "!"            {printf("Line:%d | Lex14(LogicOp)-->!\n\n",lineNumber);return EXC_MARK;}
 "&&"           {printf("Line:%d | Lex11(LogicOp)-->&&\n\n",lineNumber);return LOGICAL_AND;}
 "||"           {printf("Line:%d | Lex11(LogicOp)-->||\n\n",lineNumber);return LOGICAL_OR;}

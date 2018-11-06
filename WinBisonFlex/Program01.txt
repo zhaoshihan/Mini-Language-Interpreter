@@ -1,6 +1,6 @@
 ";
 123a;
-string s = "This is for testing";
+string s = "This is for testing\";
 float f = 1.32;
 int _a = 10;
 int b = 0;
