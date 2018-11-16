@@ -50,12 +50,13 @@ extern int yydebug;
 	#include <string>
 
 	#include "ScannerParserCL.h"
+	#include "MathExpression.h"
 		
 	using namespace std;
 
 	typedef void* yyscan_t;
 
-#line 59 "analyzer.h" /* yacc.c:1909  */
+#line 60 "analyzer.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -117,14 +118,15 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 75 "analyzer.y" /* yacc.c:1909  */
+#line 76 "analyzer.y" /* yacc.c:1909  */
 	int int_value;
 	double double_value;
 	char* cstr;
 	Node* node;
+
 	assign_statement* assignment;
 
-#line 128 "analyzer.h" /* yacc.c:1909  */
+#line 130 "analyzer.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

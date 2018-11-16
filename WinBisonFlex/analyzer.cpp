@@ -103,12 +103,13 @@ extern int yydebug;
 	#include <string>
 
 	#include "ScannerParserCL.h"
+	#include "MathExpression.h"
 		
 	using namespace std;
 
 	typedef void* yyscan_t;
 
-#line 112 "analyzer.cpp" /* yacc.c:355  */
+#line 113 "analyzer.cpp" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -170,14 +171,15 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 75 "analyzer.y" /* yacc.c:355  */
+#line 76 "analyzer.y" /* yacc.c:355  */
 	int int_value;
 	double double_value;
 	char* cstr;
 	Node* node;
+
 	assign_statement* assignment;
 
-#line 181 "analyzer.cpp" /* yacc.c:355  */
+#line 183 "analyzer.cpp" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -205,9 +207,9 @@ int yyparse (yyscan_t scanner, ScannerParserCL* pParseTree);
 
 /* Copy the second part of user declarations.  */
 
-#line 209 "analyzer.cpp" /* yacc.c:358  */
+#line 211 "analyzer.cpp" /* yacc.c:358  */
 /* Unqualified %code blocks.  */
-#line 52 "analyzer.y" /* yacc.c:359  */
+#line 53 "analyzer.y" /* yacc.c:359  */
 
 
 	// flex's data type
@@ -217,7 +219,7 @@ int yyparse (yyscan_t scanner, ScannerParserCL* pParseTree);
 
 	void yyerror (YYLTYPE*, yyscan_t yyscanner, ScannerParserCL* pParseTree, const char*);
 
-#line 221 "analyzer.cpp" /* yacc.c:359  */
+#line 223 "analyzer.cpp" /* yacc.c:359  */
 
 #ifdef short
 # undef short
@@ -502,8 +504,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   116,   116,   117,   120,   121,   126,   129,   130,   131,
-     134,   137,   138,   143,   144,   145,   146,   151,   152
+       0,   118,   118,   119,   122,   123,   128,   131,   132,   133,
+     136,   142,   146,   153,   154,   155,   156,   162,   163
 };
 #endif
 
@@ -1220,7 +1222,7 @@ YYLTYPE yylloc = yyloc_default;
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
 /* User initialization code.  */
-#line 63 "analyzer.y" /* yacc.c:1429  */
+#line 64 "analyzer.y" /* yacc.c:1429  */
 {
 	/* code for initialization before parsing 
 		code in this block is executed each time yyparse is called. */
@@ -1229,7 +1231,7 @@ YYLTYPE yylloc = yyloc_default;
 		// yydebug = 1;
 }
 
-#line 1233 "analyzer.cpp" /* yacc.c:1429  */
+#line 1235 "analyzer.cpp" /* yacc.c:1429  */
   yylsp[0] = yylloc;
   goto yysetstate;
 
@@ -1416,105 +1418,114 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 121 "analyzer.y" /* yacc.c:1646  */
+#line 123 "analyzer.y" /* yacc.c:1646  */
     { 
 		pParseTree->makeTreeHead((yyvsp[-1].node));
 		cout << "Parsed: "<<(yyvsp[-1].node)->nodeType<<"="<<(yyvsp[-1].node)->value<<endl;
 		pParseTree->printTree(pParseTree->getTreeHead());
 }
-#line 1426 "analyzer.cpp" /* yacc.c:1646  */
+#line 1428 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 126 "analyzer.y" /* yacc.c:1646  */
+#line 128 "analyzer.y" /* yacc.c:1646  */
     {   
 		pParseTree->storeAssign((yyvsp[-1].assignment));
 }
-#line 1434 "analyzer.cpp" /* yacc.c:1646  */
+#line 1436 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 129 "analyzer.y" /* yacc.c:1646  */
+#line 131 "analyzer.y" /* yacc.c:1646  */
     { pParseTree->printIdentifier((yyvsp[-1].cstr)); }
-#line 1440 "analyzer.cpp" /* yacc.c:1646  */
+#line 1442 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 130 "analyzer.y" /* yacc.c:1646  */
+#line 132 "analyzer.y" /* yacc.c:1646  */
     { pParseTree->SayHello("I am a parser!");}
-#line 1446 "analyzer.cpp" /* yacc.c:1646  */
+#line 1448 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 131 "analyzer.y" /* yacc.c:1646  */
+#line 133 "analyzer.y" /* yacc.c:1646  */
     { yyerrok; }
-#line 1452 "analyzer.cpp" /* yacc.c:1646  */
+#line 1454 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 134 "analyzer.y" /* yacc.c:1646  */
-    {(yyval.assignment) = pParseTree->makeAssign(NUMBER, (yyvsp[-2].cstr), (yyvsp[0].node)->value);}
-#line 1458 "analyzer.cpp" /* yacc.c:1646  */
+#line 136 "analyzer.y" /* yacc.c:1646  */
+    { 
+		auto pAssign = pParseTree->getPAssign();
+		(yyval.assignment) = pAssign->makeAssign(NUMBER, (yyvsp[-2].cstr), (yyvsp[0].node)->value);
+}
+#line 1463 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 137 "analyzer.y" /* yacc.c:1646  */
-    { (yyval.node) = pParseTree->makeNode( "number",(yyvsp[0].double_value));}
-#line 1464 "analyzer.cpp" /* yacc.c:1646  */
+#line 142 "analyzer.y" /* yacc.c:1646  */
+    { 
+		auto pMath = pParseTree->getPMath();
+		(yyval.node) = pMath->makeNode( "number",(yyvsp[0].double_value));
+}
+#line 1472 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 138 "analyzer.y" /* yacc.c:1646  */
-    {	
-		double result = pParseTree->getIdentifier((yyvsp[0].cstr));
+#line 146 "analyzer.y" /* yacc.c:1646  */
+    {
+		auto pMath = pParseTree->getPMath();
+		auto pVariableMap = pParseTree->getPVariableMap();	
+		double result = pVariableMap->getIdentifier((yyvsp[0].cstr));
 		if(isnan(result)){ YYERROR; }
-		else{ (yyval.node) = pParseTree->makeNode( (yyvsp[0].cstr), result); }
+		else{ (yyval.node) = pMath->makeNode( (yyvsp[0].cstr), result); }
 }
-#line 1474 "analyzer.cpp" /* yacc.c:1646  */
+#line 1484 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 143 "analyzer.y" /* yacc.c:1646  */
-    {(yyval.node) = pParseTree->makeNode((yyvsp[-2].node)->value+(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "+");}
-#line 1480 "analyzer.cpp" /* yacc.c:1646  */
+#line 153 "analyzer.y" /* yacc.c:1646  */
+    {auto pMath = pParseTree->getPMath(); (yyval.node) = pMath->makeNode((yyvsp[-2].node)->value+(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "+");}
+#line 1490 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 144 "analyzer.y" /* yacc.c:1646  */
-    {(yyval.node) = pParseTree->makeNode((yyvsp[-2].node)->value-(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "-");}
-#line 1486 "analyzer.cpp" /* yacc.c:1646  */
+#line 154 "analyzer.y" /* yacc.c:1646  */
+    {auto pMath = pParseTree->getPMath(); (yyval.node) = pMath->makeNode((yyvsp[-2].node)->value-(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "-");}
+#line 1496 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 145 "analyzer.y" /* yacc.c:1646  */
-    {(yyval.node) = pParseTree->makeNode((yyvsp[-2].node)->value*(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "*");}
-#line 1492 "analyzer.cpp" /* yacc.c:1646  */
-    break;
-
-  case 16:
-#line 146 "analyzer.y" /* yacc.c:1646  */
-    {
-		double num = (yyvsp[0].node)->value;
-		if(num >=(-1e-6)&& num<=(1e-6)){ printf("Division by zero\n"); YYERROR; }
-		else{ (yyval.node) = pParseTree->makeNode((yyvsp[-2].node)->value/(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "/"); }
-}
+#line 155 "analyzer.y" /* yacc.c:1646  */
+    {auto pMath = pParseTree->getPMath(); (yyval.node) = pMath->makeNode((yyvsp[-2].node)->value*(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "*");}
 #line 1502 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
+  case 16:
+#line 156 "analyzer.y" /* yacc.c:1646  */
+    {
+		auto pMath = pParseTree->getPMath();
+		double num = (yyvsp[0].node)->value;
+		if(num >=(-1e-6)&& num<=(1e-6)){ printf("Division by zero\n"); YYERROR; }
+		else{ (yyval.node) = pMath->makeNode((yyvsp[-2].node)->value/(yyvsp[0].node)->value, (yyvsp[-2].node), (yyvsp[0].node), "/"); }
+}
+#line 1513 "analyzer.cpp" /* yacc.c:1646  */
+    break;
+
   case 17:
-#line 151 "analyzer.y" /* yacc.c:1646  */
-    { (yyval.node) = pParseTree->makeNode((yyvsp[-1].node)->value, (yyvsp[-1].node), "()"); }
-#line 1508 "analyzer.cpp" /* yacc.c:1646  */
+#line 162 "analyzer.y" /* yacc.c:1646  */
+    { auto pMath = pParseTree->getPMath(); (yyval.node) = pMath->makeNode((yyvsp[-1].node)->value, (yyvsp[-1].node), "()"); }
+#line 1519 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 152 "analyzer.y" /* yacc.c:1646  */
-    {(yyval.node) = pParseTree->makeNode(-(yyvsp[0].node)->value, (yyvsp[0].node), "-");}
-#line 1514 "analyzer.cpp" /* yacc.c:1646  */
+#line 163 "analyzer.y" /* yacc.c:1646  */
+    {auto pMath = pParseTree->getPMath(); (yyval.node) = pMath->makeNode(-(yyvsp[0].node)->value, (yyvsp[0].node), "-");}
+#line 1525 "analyzer.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1518 "analyzer.cpp" /* yacc.c:1646  */
+#line 1529 "analyzer.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1749,7 +1760,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 155 "analyzer.y" /* yacc.c:1906  */
+#line 166 "analyzer.y" /* yacc.c:1906  */
 
 
 // newer yyerror() function definition

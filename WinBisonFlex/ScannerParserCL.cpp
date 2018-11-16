@@ -9,18 +9,43 @@
 ScannerParserCL::ScannerParserCL()
 {
 	treeHead = nullptr;
+	pMath = new MathExpression();
+	pAssign = new AssignExpression();
+	pVariableMap = new VariableMap();
 }
 
 
 ScannerParserCL::~ScannerParserCL()
 {
 	delete treeHead;
+	delete pAssign;
+	delete pMath;
+	delete pVariableMap;
+
 	treeHead = nullptr;
+	pAssign = nullptr;
+	pMath = nullptr;
+	pVariableMap = nullptr;
 }
 
 Node * ScannerParserCL::getTreeHead()
 {
 	return this->treeHead;
+}
+
+MathExpression * ScannerParserCL::getPMath()
+{
+	return pMath;
+}
+
+AssignExpression * ScannerParserCL::getPAssign()
+{
+	return pAssign;
+}
+
+VariableMap * ScannerParserCL::getPVariableMap()
+{
+	return pVariableMap;
 }
 
 void ScannerParserCL::SayHello(char* const msg) const
@@ -87,24 +112,6 @@ void ScannerParserCL::copy_string(string& Target, const char* pSource)
 }
 
 
-Node * ScannerParserCL::makeNode(const char * nodeType, double value)
-{
-	Node* node = new Node(nodeType,value);
-	return node;
-}
-
-Node * ScannerParserCL::makeNode(double value, Node * left, Node * right, string operand)
-{
-	Node* node = new Node(value, left, right, operand);
-	return node;
-}
-
-Node * ScannerParserCL::makeNode(double value, Node * right, string operand)
-{
-	Node* node = new Node(value, right, operand);
-	return node;
-}
-
 void ScannerParserCL::makeTreeHead(Node * node)
 {
 	treeHead = node;
@@ -144,18 +151,6 @@ void ScannerParserCL::printTree(Node * pNode, const string& prefix)
 	}
 }
 
-assign_statement * ScannerParserCL::makeAssign(MYTYPE Type, char* const identifier, double double_value)
-{
-	assign_statement* pState = new assign_statement(Type, identifier, double_value);
-	return pState;
-}
-
-assign_statement * ScannerParserCL::makeAssign(MYTYPE Type, char* const identifier, char* const string_value)
-{
-	assign_statement* pState = new assign_statement(Type, identifier, string_value);
-	return pState;
-}
-
 void ScannerParserCL::storeAssign(assign_statement * pState)
 {
 	if (pState == nullptr)
@@ -167,13 +162,10 @@ void ScannerParserCL::storeAssign(assign_statement * pState)
 	switch (Type)
 	{
 	case NUMBER:
-		doubleIdentifiers.erase(pState->identifier);
-		doubleIdentifiers.insert(pair<string, double>(pState->identifier, pState->double_value));
+		pVariableMap->setIdentifier(pair<string, double>(pState->identifier, pState->double_value));
 		break;
 	case STRING:
-		stringIdentifiers.erase(pState->identifier);
-		stringIdentifiers.insert(pair<string, string>(pState->identifier, pState->string_value));
-
+		pVariableMap->setIdentifier(pair<string, string>(pState->identifier, pState->string_value));
 		break;
 	default:
 		printf("error\n");
@@ -184,7 +176,7 @@ void ScannerParserCL::storeAssign(assign_statement * pState)
 
 void ScannerParserCL::printIdentifier(string identifier)
 {
-	double result = getIdentifier(identifier);
+	double result = pVariableMap->getIdentifier(identifier);
 	if (isnan(result))
 	{
 		return;
@@ -194,16 +186,3 @@ void ScannerParserCL::printIdentifier(string identifier)
 	}
 }
 
-double ScannerParserCL::getIdentifier(string identifier)
-{
-	auto got = doubleIdentifiers.find(identifier);
-	if (got == doubleIdentifiers.end())
-	{
-		printf("not found identifier\n");
-		return NAN;
-	}
-	else
-	{
-		return got->second;
-	}
-}

@@ -41,6 +41,7 @@
 	#include <string>
 
 	#include "ScannerParserCL.h"
+	#include "MathExpression.h"
 		
 	using namespace std;
 
@@ -76,6 +77,7 @@
 	double double_value;
 	char* cstr;
 	Node* node;
+
 	assign_statement* assignment;
 }
 	//%define api.value.type { double }
@@ -114,7 +116,7 @@
 %%
 
 program: %empty
-	| program line
+	| program line	
 	;
 	
 line: '\n'
@@ -131,25 +133,34 @@ line: '\n'
 	| error '\n'	{ yyerrok; }
 	; 
 
-assignment: IDENTIFIER ASSIGN expr	{$$ = pParseTree->makeAssign(NUMBER, $1, $3->value);}
+assignment: IDENTIFIER ASSIGN expr	{ 
+		auto pAssign = pParseTree->getPAssign();
+		$$ = pAssign->makeAssign(NUMBER, $1, $3->value);
+}
 	;
 
-expr: NUM		{ $$ = pParseTree->makeNode( "number",$1);}
-	| IDENTIFIER	{	
-		double result = pParseTree->getIdentifier($1);
-		if(isnan(result)){ YYERROR; }
-		else{ $$ = pParseTree->makeNode( $1, result); }
+expr: NUM	{ 
+		auto pMath = pParseTree->getPMath();
+		$$ = pMath->makeNode( "number",$1);
 }
-	| expr ADD expr	{$$ = pParseTree->makeNode($1->value+$3->value, $1, $3, "+");}
-	| expr SUB expr	{$$ = pParseTree->makeNode($1->value-$3->value, $1, $3, "-");}
-	| expr MUL expr	{$$ = pParseTree->makeNode($1->value*$3->value, $1, $3, "*");}
+	| IDENTIFIER	{
+		auto pMath = pParseTree->getPMath();
+		auto pVariableMap = pParseTree->getPVariableMap();	
+		double result = pVariableMap->getIdentifier($1);
+		if(isnan(result)){ YYERROR; }
+		else{ $$ = pMath->makeNode( $1, result); }
+}
+	| expr ADD expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value+$3->value, $1, $3, "+");}
+	| expr SUB expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value-$3->value, $1, $3, "-");}
+	| expr MUL expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value*$3->value, $1, $3, "*");}
 	| expr DIV expr	{
+		auto pMath = pParseTree->getPMath();
 		double num = $3->value;
 		if(num >=(-1e-6)&& num<=(1e-6)){ printf("Division by zero\n"); YYERROR; }
-		else{ $$ = pParseTree->makeNode($1->value/$3->value, $1, $3, "/"); }
+		else{ $$ = pMath->makeNode($1->value/$3->value, $1, $3, "/"); }
 }
-	| LP expr RP { $$ = pParseTree->makeNode($2->value, $2, "()"); }
-	| SUB expr %prec LP {$$ = pParseTree->makeNode(-$2->value, $2, "-");}
+	| LP expr RP { auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($2->value, $2, "()"); }
+	| SUB expr %prec LP {auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode(-$2->value, $2, "-");}
 	;
 
 %%
