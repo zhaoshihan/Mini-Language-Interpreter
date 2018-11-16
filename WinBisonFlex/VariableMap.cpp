@@ -2,13 +2,13 @@
 #include <iostream>
 
 
-double VariableMap::getIdentifier(string identifier)
+DiyValue VariableMap::getIdentifier(string identifier)
 {
-	auto got = doubleIdentifiers.find(identifier);
-	if (got == doubleIdentifiers.end())
+	auto got = IdentifiersMap.find(identifier);
+	if (got == IdentifiersMap.end())
 	{
 		printf("not found identifier\n");
-		return NAN;
+		return DiyValue(BAD);
 	}
 	else
 	{
@@ -16,14 +16,14 @@ double VariableMap::getIdentifier(string identifier)
 	}
 }
 
-void VariableMap::setIdentifier(pair<string, double> parameter)
+void VariableMap::setIdentifier(pair<string, DiyValue> parameter)
 {
-	doubleIdentifiers.erase(parameter.first);
-	doubleIdentifiers.insert(parameter);
+	IdentifiersMap.erase(parameter.first);
+	IdentifiersMap.insert(parameter);
 }
 
-void VariableMap::setIdentifier(pair<string, string> parameter)
-{
-	stringIdentifiers.erase(parameter.first);
-	stringIdentifiers.insert(parameter);
-}
+//void VariableMap::setIdentifier(pair<string, string> parameter)
+//{
+//	stringIdentifiers.erase(parameter.first);
+//	stringIdentifiers.insert(parameter);
+//}

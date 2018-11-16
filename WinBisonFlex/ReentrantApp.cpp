@@ -14,6 +14,7 @@ int main()
 	lineNumber = 1;
 	pt.RunParser(fileName);
 
+
 	std::cout << "Type any key"; char c = std::cin.get();
 
 	system("pause");

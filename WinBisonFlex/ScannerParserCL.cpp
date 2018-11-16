@@ -158,31 +158,52 @@ void ScannerParserCL::storeAssign(assign_statement * pState)
 		printf("get pState = nullptr error \n");
 		return;
 	}
-	MYTYPE Type = pState->Type;
-	switch (Type)
-	{
-	case NUMBER:
-		pVariableMap->setIdentifier(pair<string, double>(pState->identifier, pState->double_value));
-		break;
-	case STRING:
-		pVariableMap->setIdentifier(pair<string, string>(pState->identifier, pState->string_value));
-		break;
-	default:
-		printf("error\n");
-		break;
-	}
+	pVariableMap->setIdentifier(pair<string, DiyValue>(pState->identifier, pState->value));
 
 }
 
 void ScannerParserCL::printIdentifier(string identifier)
 {
-	double result = pVariableMap->getIdentifier(identifier);
-	if (isnan(result))
+	DiyValue result = pVariableMap->getIdentifier(identifier);
+	switch (result.type)
 	{
-		return;
+	case INT:
+	{
+		int int_value;
+		result.getValue(&int_value);
+		cout << "Identifier: " << identifier << "=" << int_value << endl;
+		break;
 	}
-	else {
-		cout << "Identifier: " << identifier << "=" << result << endl;
+	case FLOAT:
+	{
+		float float_value;
+		result.getValue(&float_value);
+		cout << "Identifier: " << identifier << "=" << float_value << endl;
+		break;
+	}
+	case DOUBLE:
+	{
+		double double_value;
+		result.getValue(&double_value);
+		cout << "Identifier: " << identifier << "=" << double_value << endl;
+		break;
+	}
+	case BOOL:
+	{
+		bool bool_value;
+		result.getValue(&bool_value);
+		cout << "Identifier: " << identifier << "=" << bool_value << endl;
+		break;
+	}
+	case STRING:
+	{
+		string string_value;
+		result.getValue(&string_value);
+		cout << "Identifier: " << identifier << "=" << string_value << endl;
+		break;
+	}
+	default:
+		break;
 	}
 }
 

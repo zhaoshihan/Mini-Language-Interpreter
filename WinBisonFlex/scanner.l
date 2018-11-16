@@ -57,6 +57,7 @@ STR  \"([^\"&^\n])*\"
 %%
 "int"          {printf("Line:%d | Lex12(keyword)-->int\n\n",lineNumber);return INT_TYPE;}
 "float"        {printf("Line:%d | Lex12(keyword)-->float\n\n",lineNumber);return FLOAT_TYPE;}
+"double"	   {printf("Line:%d | Lex12(keyword)-->double\n\n",lineNumber);return DOUBLE_TYPE;}
 "bool"         {printf("Line:%d | Lex12(keyword)-->bool\n\n",lineNumber);return BOOL_TYPE;}
 "string"       {printf("Line:%d | Lex12(keyword)-->string\n\n",lineNumber);return STRING_TYPE;}
 "function"     {printf("Line:%d | Lex12(keyword)-->function\n\n",lineNumber);return FUNCTION;}
@@ -69,8 +70,8 @@ STR  \"([^\"&^\n])*\"
 "break"        {printf("Line:%d | Lex12(keyword)-->break\n\n",lineNumber);return BREAK;}
 "continue"     {printf("Line:%d | Lex12(keyword)-->continue\n\n",lineNumber);return CONTINUE;}
 "null"         {printf("Line:%d | Lex12(keyword)-->null\n\n",lineNumber);return NULL_T;}
-"true"         {printf("Line:%d | Lex12(keyword)-->true\n\n",lineNumber);return TRUE_T;}
-"false"        {printf("Line:%d | Lex12(keyword)-->false\n\n",lineNumber);return FALSE_T;}
+"true"         {printf("Line:%d | Lex12(keyword)-->true\n\n",lineNumber); yylval->bool_value = true; return TRUE_T;}
+"false"        {printf("Line:%d | Lex12(keyword)-->false\n\n",lineNumber); yylval->bool_value = false; return FALSE_T;}
 "global"       {printf("Line:%d | Lex12(keyword)-->global\n\n",lineNumber);return GLOBAL_T;}
 "("            {printf("Line:%d | Lex10(operand)-->(\n\n",lineNumber);return LP;}
 ")"            {printf("Line:%d | Lex10(operand)-->)\n\n",lineNumber);return RP;}

@@ -7,21 +7,21 @@
 #include <string>
 #include <unordered_map>
 
+#include "DiyValue.h"
 using namespace std;
 
 class VariableMap
 {
 private:
-	unordered_map<string, double> doubleIdentifiers;
-	unordered_map<string, string> stringIdentifiers;
+	unordered_map<string, DiyValue> IdentifiersMap;
 
 public:
 	VariableMap() = default;
 	~VariableMap() = default;
 
-	double getIdentifier(string identifier);
-	void setIdentifier(pair<string, double> parameter);
-	void setIdentifier(pair<string, string> parameter);
+	DiyValue getIdentifier(string identifier);
+	void setIdentifier(pair<string, DiyValue> parameter);
+	//void setIdentifier(pair<string, string> parameter);
 };
 
 

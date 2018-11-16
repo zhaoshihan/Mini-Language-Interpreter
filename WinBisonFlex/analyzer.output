@@ -2,6 +2,7 @@ Terminals unused in grammar
 
    INT_TYPE
    FLOAT_TYPE
+   DOUBLE_TYPE
    BOOL_TYPE
    STRING_TYPE
    DQ_MARK
@@ -46,22 +47,22 @@ Grammar
     2        | program line
 
     3 line: '\n'
-    4     | expr '\n'
-    5     | assignment '\n'
+    4     | math_statement '\n'
+    5     | assign_statement '\n'
     6     | PRINT_T IDENTIFIER '\n'
     7     | "hello msg" '\n'
     8     | error '\n'
 
-    9 assignment: IDENTIFIER ASSIGN expr
+    9 assign_statement: IDENTIFIER ASSIGN math_statement
 
-   10 expr: NUM
-   11     | IDENTIFIER
-   12     | expr ADD expr
-   13     | expr SUB expr
-   14     | expr MUL expr
-   15     | expr DIV expr
-   16     | LP expr RP
-   17     | SUB expr
+   10 math_statement: NUM
+   11               | IDENTIFIER
+   12               | math_statement ADD math_statement
+   13               | math_statement SUB math_statement
+   14               | math_statement MUL math_statement
+   15               | math_statement DIV math_statement
+   16               | LP math_statement RP
+   17               | SUB math_statement
 
 
 Terminals, with rules where they appear
@@ -74,61 +75,62 @@ IDENTIFIER (259) 6 9 11
 "hello msg" (260) 7
 INT_TYPE (261)
 FLOAT_TYPE (262)
-BOOL_TYPE (263)
-STRING_TYPE (264)
-DQ_MARK (265)
-EXC_MARK (266)
-INCREASE (267)
-DECREASE (268)
-STR_VAL (269)
-PRINT_T (270) 6
-COMMENT (271)
-FUNCTION (272)
-IF (273)
-ELSE (274)
-ELSIF (275)
-WHILE (276)
-FOR (277)
-RETURN_T (278)
-BREAK (279)
-CONTINUE (280)
-NULL_T (281)
-LC (282)
-RC (283)
-SEMICOLON (284)
-COMMA (285)
-ASSIGN (286) 9
-LOGICAL_AND (287)
-LOGICAL_OR (288)
-EQ (289)
-NE (290)
-GT (291)
-GE (292)
-LT (293)
-LE (294)
-MOD (295)
-TRUE_T (296)
-FALSE_T (297)
-GLOBAL_T (298)
-SUB (299) 13 17
-ADD (300) 12
-MUL (301) 14
-DIV (302) 15
-LP (303) 16
-RP (304) 16
+DOUBLE_TYPE (263)
+BOOL_TYPE (264)
+STRING_TYPE (265)
+DQ_MARK (266)
+EXC_MARK (267)
+INCREASE (268)
+DECREASE (269)
+STR_VAL (270)
+PRINT_T (271) 6
+COMMENT (272)
+FUNCTION (273)
+IF (274)
+ELSE (275)
+ELSIF (276)
+WHILE (277)
+FOR (278)
+RETURN_T (279)
+BREAK (280)
+CONTINUE (281)
+NULL_T (282)
+LC (283)
+RC (284)
+SEMICOLON (285)
+COMMA (286)
+ASSIGN (287) 9
+LOGICAL_AND (288)
+LOGICAL_OR (289)
+EQ (290)
+NE (291)
+GT (292)
+GE (293)
+LT (294)
+LE (295)
+MOD (296)
+TRUE_T (297)
+FALSE_T (298)
+GLOBAL_T (299)
+SUB (300) 13 17
+ADD (301) 12
+MUL (302) 14
+DIV (303) 15
+LP (304) 16
+RP (305) 16
 
 
 Nonterminals, with rules where they appear
 
-$accept (51)
+$accept (52)
     on left: 0
-program (52)
+program (53)
     on left: 1 2, on right: 0 2
-line (53)
+line (54)
     on left: 3 4 5 6 7 8, on right: 2
-assignment (54)
+assign_statement (55)
     on left: 9, on right: 5
-expr (55)
+math_statement (56)
     on left: 10 11 12 13 14 15 16 17, on right: 4 9 12 13 14 15 16
     17
 
@@ -157,9 +159,9 @@ State 1
     LP           shift, and go to state 9
     '\n'         shift, and go to state 10
 
-    line        go to state 11
-    assignment  go to state 12
-    expr        go to state 13
+    line              go to state 11
+    assign_statement  go to state 12
+    math_statement    go to state 13
 
 
 State 2
@@ -178,19 +180,19 @@ State 3
 
 State 4
 
-   10 expr: NUM .
+   10 math_statement: NUM .
 
-    $default  reduce using rule 10 (expr)
+    $default  reduce using rule 10 (math_statement)
 
 
 State 5
 
-    9 assignment: IDENTIFIER . ASSIGN expr
-   11 expr: IDENTIFIER .
+    9 assign_statement: IDENTIFIER . ASSIGN math_statement
+   11 math_statement: IDENTIFIER .
 
     ASSIGN  shift, and go to state 15
 
-    $default  reduce using rule 11 (expr)
+    $default  reduce using rule 11 (math_statement)
 
 
 State 6
@@ -209,26 +211,26 @@ State 7
 
 State 8
 
-   17 expr: SUB . expr
+   17 math_statement: SUB . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 19
+    math_statement  go to state 19
 
 
 State 9
 
-   16 expr: LP . expr RP
+   16 math_statement: LP . math_statement RP
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 20
+    math_statement  go to state 20
 
 
 State 10
@@ -247,18 +249,18 @@ State 11
 
 State 12
 
-    5 line: assignment . '\n'
+    5 line: assign_statement . '\n'
 
     '\n'  shift, and go to state 21
 
 
 State 13
 
-    4 line: expr . '\n'
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
+    4 line: math_statement . '\n'
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
 
     SUB   shift, and go to state 22
     ADD   shift, and go to state 23
@@ -276,14 +278,14 @@ State 14
 
 State 15
 
-    9 assignment: IDENTIFIER ASSIGN . expr
+    9 assign_statement: IDENTIFIER ASSIGN . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 27
+    math_statement  go to state 27
 
 
 State 16
@@ -302,29 +304,29 @@ State 17
 
 State 18
 
-   11 expr: IDENTIFIER .
+   11 math_statement: IDENTIFIER .
 
-    $default  reduce using rule 11 (expr)
+    $default  reduce using rule 11 (math_statement)
 
 
 State 19
 
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
-   17     | SUB expr .
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
+   17               | SUB math_statement .
 
-    $default  reduce using rule 17 (expr)
+    $default  reduce using rule 17 (math_statement)
 
 
 State 20
 
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
-   16     | LP expr . RP
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
+   16               | LP math_statement . RP
 
     SUB  shift, and go to state 22
     ADD  shift, and go to state 23
@@ -335,80 +337,80 @@ State 20
 
 State 21
 
-    5 line: assignment '\n' .
+    5 line: assign_statement '\n' .
 
     $default  reduce using rule 5 (line)
 
 
 State 22
 
-   13 expr: expr SUB . expr
+   13 math_statement: math_statement SUB . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 30
+    math_statement  go to state 30
 
 
 State 23
 
-   12 expr: expr ADD . expr
+   12 math_statement: math_statement ADD . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 31
+    math_statement  go to state 31
 
 
 State 24
 
-   14 expr: expr MUL . expr
+   14 math_statement: math_statement MUL . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 32
+    math_statement  go to state 32
 
 
 State 25
 
-   15 expr: expr DIV . expr
+   15 math_statement: math_statement DIV . math_statement
 
     NUM         shift, and go to state 4
     IDENTIFIER  shift, and go to state 18
     SUB         shift, and go to state 8
     LP          shift, and go to state 9
 
-    expr  go to state 33
+    math_statement  go to state 33
 
 
 State 26
 
-    4 line: expr '\n' .
+    4 line: math_statement '\n' .
 
     $default  reduce using rule 4 (line)
 
 
 State 27
 
-    9 assignment: IDENTIFIER ASSIGN expr .
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
+    9 assign_statement: IDENTIFIER ASSIGN math_statement .
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
 
     SUB  shift, and go to state 22
     ADD  shift, and go to state 23
     MUL  shift, and go to state 24
     DIV  shift, and go to state 25
 
-    $default  reduce using rule 9 (assignment)
+    $default  reduce using rule 9 (assign_statement)
 
 
 State 28
@@ -420,56 +422,56 @@ State 28
 
 State 29
 
-   16 expr: LP expr RP .
+   16 math_statement: LP math_statement RP .
 
-    $default  reduce using rule 16 (expr)
+    $default  reduce using rule 16 (math_statement)
 
 
 State 30
 
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   13     | expr SUB expr .
-   14     | expr . MUL expr
-   15     | expr . DIV expr
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   13               | math_statement SUB math_statement .
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
 
     MUL  shift, and go to state 24
     DIV  shift, and go to state 25
 
-    $default  reduce using rule 13 (expr)
+    $default  reduce using rule 13 (math_statement)
 
 
 State 31
 
-   12 expr: expr . ADD expr
-   12     | expr ADD expr .
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
+   12 math_statement: math_statement . ADD math_statement
+   12               | math_statement ADD math_statement .
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
 
     MUL  shift, and go to state 24
     DIV  shift, and go to state 25
 
-    $default  reduce using rule 12 (expr)
+    $default  reduce using rule 12 (math_statement)
 
 
 State 32
 
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   14     | expr MUL expr .
-   15     | expr . DIV expr
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   14               | math_statement MUL math_statement .
+   15               | math_statement . DIV math_statement
 
-    $default  reduce using rule 14 (expr)
+    $default  reduce using rule 14 (math_statement)
 
 
 State 33
 
-   12 expr: expr . ADD expr
-   13     | expr . SUB expr
-   14     | expr . MUL expr
-   15     | expr . DIV expr
-   15     | expr DIV expr .
+   12 math_statement: math_statement . ADD math_statement
+   13               | math_statement . SUB math_statement
+   14               | math_statement . MUL math_statement
+   15               | math_statement . DIV math_statement
+   15               | math_statement DIV math_statement .
 
-    $default  reduce using rule 15 (expr)
+    $default  reduce using rule 15 (math_statement)

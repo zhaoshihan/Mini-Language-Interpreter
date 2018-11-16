@@ -36,8 +36,8 @@ public:
 
 	void makeTreeHead(Node* node);
 	void printTree(Node* pNode, const string& prefix="");
-	void storeAssign(assign_statement * pState);
 	void printIdentifier(string identifier);
+	void storeAssign(assign_statement * pState);
 };
 
 

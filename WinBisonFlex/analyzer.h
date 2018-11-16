@@ -50,13 +50,11 @@ extern int yydebug;
 	#include <string>
 
 	#include "ScannerParserCL.h"
-	#include "MathExpression.h"
-		
 	using namespace std;
 
 	typedef void* yyscan_t;
 
-#line 60 "analyzer.h" /* yacc.c:1909  */
+#line 58 "analyzer.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -68,48 +66,49 @@ extern int yydebug;
     HELLO = 260,
     INT_TYPE = 261,
     FLOAT_TYPE = 262,
-    BOOL_TYPE = 263,
-    STRING_TYPE = 264,
-    DQ_MARK = 265,
-    EXC_MARK = 266,
-    INCREASE = 267,
-    DECREASE = 268,
-    STR_VAL = 269,
-    PRINT_T = 270,
-    COMMENT = 271,
-    FUNCTION = 272,
-    IF = 273,
-    ELSE = 274,
-    ELSIF = 275,
-    WHILE = 276,
-    FOR = 277,
-    RETURN_T = 278,
-    BREAK = 279,
-    CONTINUE = 280,
-    NULL_T = 281,
-    LC = 282,
-    RC = 283,
-    SEMICOLON = 284,
-    COMMA = 285,
-    ASSIGN = 286,
-    LOGICAL_AND = 287,
-    LOGICAL_OR = 288,
-    EQ = 289,
-    NE = 290,
-    GT = 291,
-    GE = 292,
-    LT = 293,
-    LE = 294,
-    MOD = 295,
-    TRUE_T = 296,
-    FALSE_T = 297,
-    GLOBAL_T = 298,
-    SUB = 299,
-    ADD = 300,
-    MUL = 301,
-    DIV = 302,
-    LP = 303,
-    RP = 304
+    DOUBLE_TYPE = 263,
+    BOOL_TYPE = 264,
+    STRING_TYPE = 265,
+    DQ_MARK = 266,
+    EXC_MARK = 267,
+    INCREASE = 268,
+    DECREASE = 269,
+    STR_VAL = 270,
+    PRINT_T = 271,
+    COMMENT = 272,
+    FUNCTION = 273,
+    IF = 274,
+    ELSE = 275,
+    ELSIF = 276,
+    WHILE = 277,
+    FOR = 278,
+    RETURN_T = 279,
+    BREAK = 280,
+    CONTINUE = 281,
+    NULL_T = 282,
+    LC = 283,
+    RC = 284,
+    SEMICOLON = 285,
+    COMMA = 286,
+    ASSIGN = 287,
+    LOGICAL_AND = 288,
+    LOGICAL_OR = 289,
+    EQ = 290,
+    NE = 291,
+    GT = 292,
+    GE = 293,
+    LT = 294,
+    LE = 295,
+    MOD = 296,
+    TRUE_T = 297,
+    FALSE_T = 298,
+    GLOBAL_T = 299,
+    SUB = 300,
+    ADD = 301,
+    MUL = 302,
+    DIV = 303,
+    LP = 304,
+    RP = 305
   };
 #endif
 
@@ -118,15 +117,15 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 76 "analyzer.y" /* yacc.c:1909  */
+#line 74 "analyzer.y" /* yacc.c:1909  */
 	int int_value;
 	double double_value;
+	bool bool_value;
 	char* cstr;
 	Node* node;
+	assign_statement* assign_ptr;
 
-	assign_statement* assignment;
-
-#line 130 "analyzer.h" /* yacc.c:1909  */
+#line 129 "analyzer.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

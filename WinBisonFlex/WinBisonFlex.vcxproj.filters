@@ -48,6 +48,9 @@
     <ClCompile Include="AssignExpression.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DiyValue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="analyzer.y">
@@ -74,6 +77,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AssignExpression.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BoolExpression.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DiyValue.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

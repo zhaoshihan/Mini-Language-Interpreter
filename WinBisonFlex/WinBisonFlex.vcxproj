@@ -53,6 +53,7 @@
   <ItemGroup>
     <ClCompile Include="analyzer.cpp" />
     <ClCompile Include="AssignExpression.cpp" />
+    <ClCompile Include="DiyValue.cpp" />
     <ClCompile Include="MathExpression.cpp" />
     <ClCompile Include="ReentrantApp.cpp" />
     <ClCompile Include="scanner.cpp" />
@@ -62,6 +63,8 @@
   <ItemGroup>
     <ClInclude Include="analyzer.h" />
     <ClInclude Include="AssignExpression.h" />
+    <ClInclude Include="BoolExpression.h" />
+    <ClInclude Include="DiyValue.h" />
     <ClInclude Include="MathExpression.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="ScannerParserCL.h" />

@@ -6,24 +6,18 @@
 #include <string>
 #include <unordered_map>
 
-#include "VariableMap.h"
+#include "DiyValue.h"
 using namespace std;
 
-enum MYTYPE
-{
-	NUMBER,
-	STRING,
-};
+
 struct assign_statement
 {
-	MYTYPE Type = NUMBER;
 	string identifier;
-	double double_value = 0;
-	string string_value;
+	DiyValue value;
 
 	assign_statement() = default;
-	assign_statement(MYTYPE Type, string identifier, double double_value) :Type(Type), identifier(identifier), double_value(double_value) {}
-	assign_statement(MYTYPE Type, string identifier, string string_value) :Type(Type), identifier(identifier), string_value(string_value) {}
+	assign_statement(string identifier, double double_value) :identifier(identifier) { this->value = DiyValue(); this->value.setValue(&double_value, DOUBLE); }
+	assign_statement(string identifier, string string_value) :identifier(identifier) { this->value = DiyValue(); this->value.setValue(&string_value, STRING); }
 };
 
 class AssignExpression
@@ -34,15 +28,10 @@ public:
 	AssignExpression() = default;
 	~AssignExpression() = default;
 	
-	assign_statement* makeAssign(MYTYPE Type, char* const identifier, double double_value);
-	assign_statement* makeAssign(MYTYPE Type, char* const identifier, char* const string_value);
+	assign_statement* makeAssign(char* const identifier, double double_value);
+	assign_statement* makeAssign(char* const identifier, char* const string_value);
+
 };
-
-
-
-
-
-
 
 
 #endif // !_ASSIGNEXPRESSION_H_

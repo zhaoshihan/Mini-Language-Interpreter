@@ -41,8 +41,6 @@
 	#include <string>
 
 	#include "ScannerParserCL.h"
-	#include "MathExpression.h"
-		
 	using namespace std;
 
 	typedef void* yyscan_t;
@@ -75,10 +73,10 @@
 %union
 {	int int_value;
 	double double_value;
+	bool bool_value;
 	char* cstr;
 	Node* node;
-
-	assign_statement* assignment;
+	assign_statement* assign_ptr;
 }
 	//%define api.value.type { double }
 
@@ -89,7 +87,7 @@
 	// %token<int_value> INT_NUM
 %token<cstr> IDENTIFIER
 %token HELLO "hello msg"
-%token INT_TYPE FLOAT_TYPE BOOL_TYPE STRING_TYPE
+%token INT_TYPE FLOAT_TYPE DOUBLE_TYPE BOOL_TYPE STRING_TYPE
 %token DQ_MARK EXC_MARK INCREASE DECREASE
 %token STR_VAL PRINT_T COMMENT  
 %token FUNCTION IF ELSE ELSIF WHILE FOR RETURN_T BREAK CONTINUE NULL_T
@@ -101,8 +99,8 @@
 
 
 	// non-terminal symbols should be defined using %type in bison keyword
-%type<node> expr
-%type<assignment> assignment
+%type<node> math_statement
+%type<assign_ptr> assign_statement
 
 	// for parser debugging and tracing use
 	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
@@ -120,12 +118,12 @@ program: %empty
 	;
 	
 line: '\n'
-	| expr '\n'		{ 
+	| math_statement '\n'		{ 
 		pParseTree->makeTreeHead($1);
 		cout << "Parsed: "<<$1->nodeType<<"="<<$1->value<<endl;
 		pParseTree->printTree(pParseTree->getTreeHead());
 }
-	| assignment '\n'	{   
+	| assign_statement '\n'	{   
 		pParseTree->storeAssign($1);
 }
 	| PRINT_T IDENTIFIER '\n'	{ pParseTree->printIdentifier($2); }
@@ -133,34 +131,34 @@ line: '\n'
 	| error '\n'	{ yyerrok; }
 	; 
 
-assignment: IDENTIFIER ASSIGN expr	{ 
+assign_statement: IDENTIFIER ASSIGN math_statement	{ 
 		auto pAssign = pParseTree->getPAssign();
-		$$ = pAssign->makeAssign(NUMBER, $1, $3->value);
+		$$ = pAssign->makeAssign($1, $3->value);
 }
 	;
 
-expr: NUM	{ 
+math_statement: NUM	{ 
 		auto pMath = pParseTree->getPMath();
 		$$ = pMath->makeNode( "number",$1);
 }
 	| IDENTIFIER	{
 		auto pMath = pParseTree->getPMath();
 		auto pVariableMap = pParseTree->getPVariableMap();	
-		double result = pVariableMap->getIdentifier($1);
-		if(isnan(result)){ YYERROR; }
-		else{ $$ = pMath->makeNode( $1, result); }
+		DiyValue result = pVariableMap->getIdentifier($1);
+		if(result.type != DOUBLE){ cout<<"Type error: "<< result.type <<endl; YYERROR; }
+		else{ double value = 0; result.getValue(&value); $$ = pMath->makeNode( $1, value); }
 }
-	| expr ADD expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value+$3->value, $1, $3, "+");}
-	| expr SUB expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value-$3->value, $1, $3, "-");}
-	| expr MUL expr	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value*$3->value, $1, $3, "*");}
-	| expr DIV expr	{
+	| math_statement ADD math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value+$3->value, $1, $3, "+");}
+	| math_statement SUB math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value-$3->value, $1, $3, "-");}
+	| math_statement MUL math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value*$3->value, $1, $3, "*");}
+	| math_statement DIV math_statement	{
 		auto pMath = pParseTree->getPMath();
 		double num = $3->value;
 		if(num >=(-1e-6)&& num<=(1e-6)){ printf("Division by zero\n"); YYERROR; }
 		else{ $$ = pMath->makeNode($1->value/$3->value, $1, $3, "/"); }
 }
-	| LP expr RP { auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($2->value, $2, "()"); }
-	| SUB expr %prec LP {auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode(-$2->value, $2, "-");}
+	| LP math_statement RP { auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($2->value, $2, "()"); }
+	| SUB math_statement %prec LP {auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode(-$2->value, $2, "-");}
 	;
 
 %%
