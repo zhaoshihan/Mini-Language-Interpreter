@@ -17,6 +17,7 @@ struct assign_statement
 
 	assign_statement() = default;
 	assign_statement(string identifier, double double_value) :identifier(identifier) { this->value = DiyValue(); this->value.setValue(&double_value, DOUBLE); }
+	assign_statement(string identifier, bool bool_value) :identifier(identifier) { this->value = DiyValue(); this->value.setValue(&bool_value, BOOL); }
 	assign_statement(string identifier, string string_value) :identifier(identifier) { this->value = DiyValue(); this->value.setValue(&string_value, STRING); }
 };
 
@@ -29,6 +30,7 @@ public:
 	~AssignExpression() = default;
 	
 	assign_statement* makeAssign(char* const identifier, double double_value);
+	assign_statement* makeAssign(char* const identifier, bool bool_value);
 	assign_statement* makeAssign(char* const identifier, char* const string_value);
 
 };

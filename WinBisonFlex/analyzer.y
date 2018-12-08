@@ -101,6 +101,15 @@
 	// non-terminal symbols should be defined using %type in bison keyword
 %type<node> math_statement
 %type<assign_ptr> assign_statement
+%type<bool_value> bool_statement
+%type<node> while_statement
+%type<node> for_statement
+%type<node> if_statement
+%type<node> function_definition
+%type<node> function_employ
+%type<node> return_statement
+%type<node> TypeForParam
+%type<node> block
 
 	// for parser debugging and tracing use
 	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
@@ -115,6 +124,7 @@
 
 program: %empty
 	| program line	
+	| program function_definition 
 	;
 	
 line: '\n'
@@ -123,19 +133,70 @@ line: '\n'
 		cout << "Parsed: "<<$1->nodeType<<"="<<$1->value<<endl;
 		pParseTree->printTree(pParseTree->getTreeHead());
 }
-	| assign_statement '\n'	{   
+	| assign_statement SEMICOLON '\n'	{   
 		pParseTree->storeAssign($1);
 }
-	| PRINT_T IDENTIFIER '\n'	{ pParseTree->printIdentifier($2); }
+    | bool_statement '\n'  {
+	cout << "Bool Value: "<<$1<<endl;
+	}
+	| while_statement '\n' {
+	cout<<"语法结构: while循环"<<endl;
+	}
+	| if_statement '\n' {
+	cout<<"语法结构: if判断"<<endl;
+	}
+	| for_statement '\n' {
+	cout<<"语法结构: for循环"<<endl;
+	}
+	| return_statement SEMICOLON '\n'  {
+	cout<<"return"<<endl;
+	}
+	| PRINT_T LP IDENTIFIER RP SEMICOLON '\n' { pParseTree->printIdentifier($3); }
 	| HELLO '\n'	{ pParseTree->SayHello("I am a parser!");}
 	| error '\n'	{ yyerrok; }
 	; 
 
+	lines : line
+	| lines line
+	;
+
 assign_statement: IDENTIFIER ASSIGN math_statement	{ 
 		auto pAssign = pParseTree->getPAssign();
 		$$ = pAssign->makeAssign($1, $3->value);
-}
-	;
+}   
+       |  IDENTIFIER ASSIGN function_employ{auto pAssign = pParseTree->getPAssign();$$ = pAssign->makeAssign($1, false); }
+	   |  IDENTIFIER ASSIGN bool_statement {auto pAssign = pParseTree->getPAssign();$$ =pAssign->makeAssign($1, $3);}
+	   |  IDENTIFIER INCREASE  {
+
+	    auto pMath = pParseTree->getPMath();
+		auto pVariableMap = pParseTree->getPVariableMap();	
+		DiyValue result = pVariableMap->getIdentifier($1);
+		if(result.type != DOUBLE){ cout<<"Type error: "<< result.type <<endl; YYERROR; }
+		else{ 
+		double value = 0; 
+		result.getValue(&value);
+		auto pAssign = pParseTree->getPAssign();
+	    $$ = pAssign->makeAssign($1, value+1);
+		} 
+
+	   }
+	   |  IDENTIFIER DECREASE  {
+
+	    auto pMath = pParseTree->getPMath();
+		auto pVariableMap = pParseTree->getPVariableMap();	
+		DiyValue result = pVariableMap->getIdentifier($1);
+		if(result.type != DOUBLE){ cout<<"Type error: "<< result.type <<endl; YYERROR; }
+		else{ 
+		double value = 0; 
+		result.getValue(&value);
+		auto pAssign = pParseTree->getPAssign();
+	    $$ = pAssign->makeAssign($1, value-1); 
+		}
+	   
+	   }
+	   ;
+	
+
 
 math_statement: NUM	{ 
 		auto pMath = pParseTree->getPMath();
@@ -147,7 +208,8 @@ math_statement: NUM	{
 		DiyValue result = pVariableMap->getIdentifier($1);
 		if(result.type != DOUBLE){ cout<<"Type error: "<< result.type <<endl; YYERROR; }
 		else{ double value = 0; result.getValue(&value); $$ = pMath->makeNode( $1, value); }
-}
+}   
+    | function_employ { $$ = 0;}
 	| math_statement ADD math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value+$3->value, $1, $3, "+");}
 	| math_statement SUB math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value-$3->value, $1, $3, "-");}
 	| math_statement MUL math_statement	{auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($1->value*$3->value, $1, $3, "*");}
@@ -160,6 +222,128 @@ math_statement: NUM	{
 	| LP math_statement RP { auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode($2->value, $2, "()"); }
 	| SUB math_statement %prec LP {auto pMath = pParseTree->getPMath(); $$ = pMath->makeNode(-$2->value, $2, "-");}
 	;
+
+	bool_statement: TRUE_T   {
+	    $$ = true;
+	}
+	 |  FALSE_T   {
+	    $$ = false; 
+	}
+	 |  math_statement GT math_statement	{
+
+		$$ = $1 > $3;
+
+}
+
+     |  math_statement LT math_statement {
+
+	    $$ = $1 < $3;
+
+	 } 
+
+	 |  math_statement EQ math_statement {
+
+	    $$ = $1 == $3;
+
+ 	 }
+
+	 |  math_statement GE math_statement {
+
+	    $$ = $1 >= $3;
+
+	 }
+
+	 |  math_statement LE math_statement {
+
+	    $$ = $1 <= $3;
+
+	 } 
+
+	 |  math_statement NE math_statement {
+
+	    $$ = $1 != $3;
+
+	 }
+
+	 ;
+
+	 TypeForParam
+	 : INT_TYPE
+	 | FLOAT_TYPE
+	 | DOUBLE_TYPE
+	 | BOOL_TYPE
+	 | STRING_TYPE
+	 ;
+
+
+	 function_definition
+	 : FUNCTION IDENTIFIER LP TypeForParam IDENTIFIER RP block
+	 {
+	 
+	 cout<<"语法结构: 函数定义--"<<$2<<endl;
+	 }
+	 | FUNCTION IDENTIFIER LP RP block
+	 {
+	 
+	 };
+
+	 function_employ
+	 : IDENTIFIER LP math_statement RP
+	 | IDENTIFIER LP bool_statement RP
+	 ;
+
+	 return_statement
+	 : RETURN_T math_statement
+	 | RETURN_T bool_statement
+	 ;
+
+	 if_statement
+	 : IF LP bool_statement RP block
+	 | IF LP bool_statement RP block ELSE block
+	 | IF LP bool_statement RP block elsif_list 
+	 | IF LP bool_statement RP block elsif_list ELSE block
+	 ;
+	 
+	 elsif_list
+        : elsif
+        | elsif_list elsif
+        {
+           
+        }
+        ;
+
+
+     elsif
+        : ELSIF LP bool_statement RP block
+        {
+           
+        }
+        ;
+
+
+	 while_statement
+	 : WHILE LP bool_statement RP block
+	 {
+	 }
+	 ;
+
+	 for_statement
+	 : FOR LP assign_statement SEMICOLON bool_statement SEMICOLON assign_statement RP block
+	 {
+	 
+	 }
+     ;
+
+	 block
+        : LC lines RC
+        {
+           
+        }
+        | LC RC
+        {
+           
+        }
+        ;
 
 %%
 

@@ -85,5 +85,8 @@
     <ClInclude Include="DiyValue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="WhileLoop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
