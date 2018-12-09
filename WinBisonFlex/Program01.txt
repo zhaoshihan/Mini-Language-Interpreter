@@ -1,13 +1,5 @@
-";
-123a;
-string s = "This is for testing\";
-float f = 1.32;
-int _a = 10;
-int b = 0;
-int result = 0;
-while(b<=a){
-result = a*b;
-b=b+1;
-a=a - 1;
-}
-print(result);
+a = 2;
+b = 3;
+c = a + b;
+print(c);
+

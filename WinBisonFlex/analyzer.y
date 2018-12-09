@@ -110,6 +110,7 @@
 %type<node> return_statement
 %type<node> TypeForParam
 %type<node> block
+%type<node> switchLines
 
 	// for parser debugging and tracing use
 	//%printer { fprintf(yyoutput, "--- %s", $$); } <cstr>
@@ -122,12 +123,13 @@
 
 %%
 
-program: %empty
+program: line
+    | function_definition
 	| program line	
 	| program function_definition 
 	;
 	
-line: '\n'
+line: switchLines
 	| math_statement '\n'		{ 
 		pParseTree->makeTreeHead($1);
 		cout << "Parsed: "<<$1->nodeType<<"="<<$1->value<<endl;
@@ -277,7 +279,7 @@ math_statement: NUM	{
 
 
 	 function_definition
-	 : FUNCTION IDENTIFIER LP TypeForParam IDENTIFIER RP block
+	 : FUNCTION IDENTIFIER LP TypeForParam IDENTIFIER RP switchLines block
 	 {
 	 
 	 cout<<"语法结构: 函数定义--"<<$2<<endl;
@@ -298,10 +300,10 @@ math_statement: NUM	{
 	 ;
 
 	 if_statement
-	 : IF LP bool_statement RP block
-	 | IF LP bool_statement RP block ELSE block
-	 | IF LP bool_statement RP block elsif_list 
-	 | IF LP bool_statement RP block elsif_list ELSE block
+	 : IF LP bool_statement RP switchLines block
+	 | IF LP bool_statement RP switchLines block switchLines ELSE switchLines block
+	 | IF LP bool_statement RP switchLines block switchLines elsif_list 
+	 | IF LP bool_statement RP switchLines block switchLines elsif_list switchLines ELSE switchLines block
 	 ;
 	 
 	 elsif_list
@@ -314,7 +316,7 @@ math_statement: NUM	{
 
 
      elsif
-        : ELSIF LP bool_statement RP block
+        : ELSIF LP bool_statement RP switchLines block switchLines
         {
            
         }
@@ -322,17 +324,22 @@ math_statement: NUM	{
 
 
 	 while_statement
-	 : WHILE LP bool_statement RP block
+	 : WHILE LP bool_statement RP switchLines block
 	 {
 	 }
 	 ;
 
 	 for_statement
-	 : FOR LP assign_statement SEMICOLON bool_statement SEMICOLON assign_statement RP block
+	 : FOR LP assign_statement SEMICOLON bool_statement SEMICOLON assign_statement RP switchLines block
 	 {
 	 
 	 }
      ;
+
+	 switchLines
+	 : switchLines '\n'
+	 | '\n'
+	 | %empty
 
 	 block
         : LC lines RC
