@@ -135,25 +135,25 @@ line: switchLines
 		cout << "Parsed: "<<$1->nodeType<<"="<<$1->value<<endl;
 		pParseTree->printTree(pParseTree->getTreeHead());
 }
-	| assign_statement SEMICOLON '\n'	{   
+	| assign_statement SEMICOLON 	{   
 		pParseTree->storeAssign($1);
 }
-    | bool_statement '\n'  {
+    | bool_statement   {
 	cout << "Bool Value: "<<$1<<endl;
 	}
-	| while_statement '\n' {
+	| while_statement  {
 	cout<<"语法结构: while循环"<<endl;
 	}
-	| if_statement '\n' {
+	| if_statement  {
 	cout<<"语法结构: if判断"<<endl;
 	}
-	| for_statement '\n' {
+	| for_statement  {
 	cout<<"语法结构: for循环"<<endl;
 	}
-	| return_statement SEMICOLON '\n'  {
+	| return_statement SEMICOLON   {
 	cout<<"return"<<endl;
 	}
-	| PRINT_T LP IDENTIFIER RP SEMICOLON '\n' { pParseTree->printIdentifier($3); }
+	| PRINT_T LP IDENTIFIER RP SEMICOLON { pParseTree->printIdentifier($3); }
 	| HELLO '\n'	{ pParseTree->SayHello("I am a parser!");}
 	| error '\n'	{ yyerrok; }
 	; 

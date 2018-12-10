@@ -1,0 +1,4 @@
+firstV = ;
+secondV = 2;
+result = firstV/-secondV;
+print(result)

@@ -52,7 +52,7 @@
 
 NUMB    ([0-9]+\.[0-9]+)
 INTEGER	  ([0-9]+)
-COM  ("/\*")|("\*/")
+COM  ("/\*").*("\*/")
 STR  \"([^\"&^\n])*\"
 %%
 "int"          {printf("Line:%d | Lex12(keyword)-->int\n\n",lineNumber);return INT_TYPE;}
@@ -139,5 +139,5 @@ STR  \"([^\"&^\n])*\"
 				yyextra->copy_cstr(&yylval->cstr, yytext);
 				return IDENTIFIER;
 }
-.				{ printf("Line:%d | unexpected character %s\n\n",lineNumber,yytext); yyterminate();}
+.				{ printf("Line:%d | unexpected character %s\n\n",lineNumber,yytext); }
 %%
