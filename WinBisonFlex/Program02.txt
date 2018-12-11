@@ -3,9 +3,11 @@ while(2>1)
 a = 2;
 b = 3;
 c = a + b;
+break;
 }
 
 function testfun(int a){
 a = 1;
+return a;
 }
 

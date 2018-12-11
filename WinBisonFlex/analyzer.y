@@ -110,6 +110,8 @@
 %type<node> return_statement
 %type<node> TypeForParam
 %type<node> block
+%type<node> break_statement
+%type<node> continue_statement
 %type<node> switchLines
 
 	// for parser debugging and tracing use
@@ -151,7 +153,13 @@ line: switchLines
 	cout<<"语法结构: for循环"<<endl;
 	}
 	| return_statement SEMICOLON   {
-	cout<<"return"<<endl;
+	cout<<"语法结构: return语句"<<endl;
+	}
+	| break_statement {
+	cout<<"语法结构: break语句"<<endl;
+	}
+	| continue_statement {
+	cout<<"语法结构: continue语句"<<endl;
 	}
 	| PRINT_T LP IDENTIFIER RP SEMICOLON { pParseTree->printIdentifier($3); }
 	| HELLO '\n'	{ pParseTree->SayHello("I am a parser!");}
@@ -338,7 +346,7 @@ math_statement: NUM	{
 
 	 switchLines
 	 : switchLines '\n'
-	 | '\n'
+	 | '\n' {lineNumber++;}
 	 | %empty
 
 	 block
@@ -351,6 +359,11 @@ math_statement: NUM	{
            
         }
         ;
+     break_statement
+	 : BREAK SEMICOLON {}
+	 
+	 continue_statement
+	 : CONTINUE SEMICOLON {}
 
 %%
 
@@ -360,5 +373,5 @@ math_statement: NUM	{
 void yyerror (YYLTYPE *yylloc, yyscan_t yyscanner,
 	 ScannerParserCL* pParseTree, const char* msg)
 {
-	std::cout<<"Error - "<<msg<<std::endl;
+	std::cout<<"Line:"<<lineNumber<<" Error - "<<msg<<std::endl;
 }
