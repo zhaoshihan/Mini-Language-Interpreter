@@ -1236,12 +1236,13 @@ YY_RULE_SETUP
 #line 105 "scanner.l"
 {
         printf("Line:%d | Lex03(String)-->%s\n\n",lineNumber,yytext);
+		yyextra->copy_string(&yylval->cstr, yytext);
 		return STR_VAL;
 }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 109 "scanner.l"
+#line 110 "scanner.l"
 {
         printf("Line:%d | Lex08(Comments)-->%s\n\n",lineNumber,yytext);
 		return COMMENT;
@@ -1249,14 +1250,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 114 "scanner.l"
+#line 115 "scanner.l"
 {
                 printf("Line:%d | unexpected identifier %s\n\n",lineNumber,yytext);
 }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 118 "scanner.l"
+#line 119 "scanner.l"
 {        
 
 				printf("Line:%d | Lex06(FloatNum)-->%s\n\n",lineNumber,yytext);
@@ -1269,7 +1270,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 127 "scanner.l"
+#line 128 "scanner.l"
 {
                 printf("Line:%d | Lex06(IntNum)-->%s\n\n",lineNumber,yytext);
 
@@ -1281,17 +1282,17 @@ YY_RULE_SETUP
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 136 "scanner.l"
-{ lineNumber++;return '\n'; }
+#line 137 "scanner.l"
+{ lineNumber++; return '\n';}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 137 "scanner.l"
+#line 138 "scanner.l"
 { /* empty */ }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 138 "scanner.l"
+#line 139 "scanner.l"
 {
 				printf("Line:%d | Lex13(Identifier)-->%s\n\n",lineNumber,yytext);
 				yyextra->copy_cstr(&yylval->cstr, yytext);
@@ -1300,15 +1301,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 143 "scanner.l"
+#line 144 "scanner.l"
 { printf("Line:%d | unexpected character %s\n\n",lineNumber,yytext); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 144 "scanner.l"
+#line 145 "scanner.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1311 "scanner.cpp"
+#line 1312 "scanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2548,6 +2549,6 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 144 "scanner.l"
+#line 145 "scanner.l"
 
 

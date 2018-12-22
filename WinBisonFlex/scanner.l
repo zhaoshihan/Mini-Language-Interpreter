@@ -103,6 +103,7 @@ STR  \"([^\"&^\n])*\"
 
 {STR}  {
         printf("Line:%d | Lex03(String)-->%s\n\n",lineNumber,yytext);
+		yyextra->copy_string(&yylval->cstr, yytext);
 		return STR_VAL;
 }
 {COM}  {
@@ -132,7 +133,7 @@ STR  \"([^\"&^\n])*\"
 }
 
 
-[\n]			{ lineNumber++;return '\n'; }
+[\n]			{ lineNumber++; return '\n';}
 [ \t]			{ /* empty */ }
 [A-Za-z_][A-Za-z_0-9]* {
 				printf("Line:%d | Lex13(Identifier)-->%s\n\n",lineNumber,yytext);

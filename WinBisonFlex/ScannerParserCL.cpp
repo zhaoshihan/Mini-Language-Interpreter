@@ -8,7 +8,8 @@
 
 ScannerParserCL::ScannerParserCL()
 {
-	treeHead = nullptr;
+	mathHead = nullptr;
+	grammarHead = nullptr;
 	pMath = new MathExpression();
 	pAssign = new AssignExpression();
 	pVariableMap = new VariableMap();
@@ -17,12 +18,14 @@ ScannerParserCL::ScannerParserCL()
 
 ScannerParserCL::~ScannerParserCL()
 {
-	delete treeHead;
+	delete grammarHead;
+	delete mathHead;
 	delete pAssign;
 	delete pMath;
 	delete pVariableMap;
 
-	treeHead = nullptr;
+	grammarHead = nullptr;
+	mathHead = nullptr;
 	pAssign = nullptr;
 	pMath = nullptr;
 	pVariableMap = nullptr;
@@ -30,7 +33,12 @@ ScannerParserCL::~ScannerParserCL()
 
 Node * ScannerParserCL::getTreeHead()
 {
-	return this->treeHead;
+	return this->mathHead;
+}
+
+TemplateNode * ScannerParserCL::getGrammarHead()
+{
+	return this->grammarHead;
 }
 
 MathExpression * ScannerParserCL::getPMath()
@@ -106,15 +114,19 @@ void ScannerParserCL::copy_double(double& Target, const char* pSource)
 	Target = atof(pSource);
 }
 
-void ScannerParserCL::copy_string(string& Target, const char* pSource)
+void ScannerParserCL::copy_string(char** pTarget, const char* pSource)
 {
-	Target = pSource;
+	size_t size = strlen(pSource) + 1;
+
+	*pTarget = new char[size];
+
+	strcpy_s(*pTarget, size, pSource);
 }
 
 
 void ScannerParserCL::makeTreeHead(Node * node)
 {
-	treeHead = node;
+	mathHead = node;
 }
 
 void ScannerParserCL::printTree(Node * pNode, const string& prefix)

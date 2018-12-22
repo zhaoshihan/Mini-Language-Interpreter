@@ -48,13 +48,14 @@ extern int yydebug;
 	#include <iostream>
 	#include <cstdio>
 	#include <string>
+	#include <sstream>
 
 	#include "ScannerParserCL.h"
 	using namespace std;
 
 	typedef void* yyscan_t;
 
-#line 58 "analyzer.h" /* yacc.c:1909  */
+#line 59 "analyzer.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -62,18 +63,18 @@ extern int yydebug;
   enum yytokentype
   {
     NUM = 258,
-    IDENTIFIER = 259,
-    HELLO = 260,
-    INT_TYPE = 261,
-    FLOAT_TYPE = 262,
-    DOUBLE_TYPE = 263,
-    BOOL_TYPE = 264,
-    STRING_TYPE = 265,
-    DQ_MARK = 266,
-    EXC_MARK = 267,
-    INCREASE = 268,
-    DECREASE = 269,
-    STR_VAL = 270,
+    STR_VAL = 259,
+    IDENTIFIER = 260,
+    HELLO = 261,
+    INT_TYPE = 262,
+    FLOAT_TYPE = 263,
+    DOUBLE_TYPE = 264,
+    BOOL_TYPE = 265,
+    STRING_TYPE = 266,
+    DQ_MARK = 267,
+    EXC_MARK = 268,
+    INCREASE = 269,
+    DECREASE = 270,
     PRINT_T = 271,
     COMMENT = 272,
     FUNCTION = 273,
@@ -117,15 +118,16 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 74 "analyzer.y" /* yacc.c:1909  */
+#line 76 "analyzer.y" /* yacc.c:1909  */
 	int int_value;
 	double double_value;
 	bool bool_value;
 	char* cstr;
 	Node* node;
+	TemplateNode* grammar_node;
 	assign_statement* assign_ptr;
 
-#line 129 "analyzer.h" /* yacc.c:1909  */
+#line 131 "analyzer.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

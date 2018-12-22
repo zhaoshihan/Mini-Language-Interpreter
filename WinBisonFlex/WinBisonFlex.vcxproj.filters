@@ -51,6 +51,9 @@
     <ClCompile Include="DiyValue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TemplateNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="analyzer.y">
@@ -86,6 +89,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WhileLoop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

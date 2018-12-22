@@ -19,19 +19,20 @@ struct Node
 	Node(const char* nodeType, double value) :nodeType(nodeType), value(value) {}
 	Node(double value, Node* left, Node* right, string nodeType) :value(value), left(left), right(right), nodeType(nodeType) {}
 	Node(double value, Node* right, string nodeType) :value(value), right(right), nodeType(nodeType) {}
-	~Node() {
-		if (left)
-		{
-			delete left;
-			left = nullptr;
-		}
-		if (right)
-		{
-			delete right;
-			right = nullptr;
-		}
-		delete this;
-	}
+	~Node() = default;
+	//~Node() {
+	//	if (left)
+	//	{
+	//		delete left;
+	//		left = nullptr;
+	//	}
+	//	if (right)
+	//	{
+	//		delete right;
+	//		right = nullptr;
+	//	}
+	//	delete this;
+	//}
 };
 
 class MathExpression 

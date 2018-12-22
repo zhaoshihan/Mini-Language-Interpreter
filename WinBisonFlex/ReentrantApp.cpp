@@ -12,6 +12,7 @@ int main()
 	std::cout << "Input the source file name: " << endl;
 	std::cin >> fileName;
 	lineNumber = 1;
+	IsProgramCorrect = true;
 	pt.RunParser(fileName);
 
 

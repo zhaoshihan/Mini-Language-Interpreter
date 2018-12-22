@@ -58,6 +58,7 @@
     <ClCompile Include="ReentrantApp.cpp" />
     <ClCompile Include="scanner.cpp" />
     <ClCompile Include="ScannerParserCL.cpp" />
+    <ClCompile Include="TemplateNode.cpp" />
     <ClCompile Include="VariableMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,7 @@
     <ClInclude Include="MathExpression.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="ScannerParserCL.h" />
+    <ClInclude Include="TemplateNode.h" />
     <ClInclude Include="VariableMap.h" />
     <ClInclude Include="WhileLoop.h" />
   </ItemGroup>
@@ -75,7 +77,7 @@
     <ProjectGuid>{53199835-5AEC-4AE7-B22E-3F5B835FB53D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>WinBisonFlex</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -94,13 +96,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
